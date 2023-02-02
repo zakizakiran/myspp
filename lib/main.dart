@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myspp_app/pages/onboard.dart';
 import 'package:myspp_app/pages/splash/splash.dart';
 
 void main() {
