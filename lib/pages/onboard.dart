@@ -35,7 +35,7 @@ class _OnboardState extends State<Onboard> {
                   ),
                   const SizedBox(height: 8.0),
                   Image.asset(
-                    'assets/img/splash.png',
+                    'assets/img/logo.png',
                     width: 120.0,
                   ),
                   // Row(

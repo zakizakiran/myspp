@@ -14,7 +14,7 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
-      splash: 'assets/img/splash.png',
+      splash: 'assets/img/logo.png',
       nextScreen: const Onboard(),
       splashTransition: SplashTransition.fadeTransition,
       splashIconSize: 50,
