@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myspp_app/firebase_options.dart';
-import 'package:myspp_app/navigation/navbar.dart';
 import 'package:myspp_app/pages/splash/authenticated_splash.dart';
 import 'package:myspp_app/pages/splash/splash.dart';
 
