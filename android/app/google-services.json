@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "230196197514",
+    "project_id": "myspp-app",
+    "storage_bucket": "myspp-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:230196197514:android:ab94856fdd133205345573",
+        "android_client_info": {
+          "package_name": "com.example.myspp_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "230196197514-b6184jci264gsd6nv6v2a6p3sjhs6l0k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5riN-6hsW2sjw4bbkt6xM5sEp5IhWXiY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "230196197514-b6184jci264gsd6nv6v2a6p3sjhs6l0k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

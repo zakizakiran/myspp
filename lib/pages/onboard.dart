@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:myspp_app/pages/auth/login.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class Onboard extends StatefulWidget {
   const Onboard({super.key});
@@ -26,36 +27,41 @@ class _OnboardState extends State<Onboard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Selamat datang di',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 36,
-                    ),
+                  AnimatedTextKit(
+                    animatedTexts: [
+                      TyperAnimatedText(
+                        'Selamat datang di',
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 36,
+                        ),
+                        speed: const Duration(milliseconds: 100),
+                      ),
+                    ],
+                    totalRepeatCount: 1,
+                    pause: const Duration(milliseconds: 3000),
+                    displayFullTextOnTap: true,
+                    stopPauseOnTap: true,
                   ),
                   const SizedBox(height: 8.0),
-                  Image.asset(
-                    'assets/img/logo.png',
-                    width: 120.0,
+                  Row(
+                    children: [
+                      Text(
+                        'My',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 36,
+                            color: HexColor('7286D3')),
+                      ),
+                      const Text(
+                        'Spp.',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 36,
+                        ),
+                      ),
+                    ],
                   ),
-                  // Row(
-                  //   children: [
-                  //     Text(
-                  //       'My',
-                  //       style: TextStyle(
-                  //           fontWeight: FontWeight.w600,
-                  //           fontSize: 36,
-                  //           color: HexColor('7286D3')),
-                  //     ),
-                  //     const Text(
-                  //       'Spp.',
-                  //       style: TextStyle(
-                  //         fontWeight: FontWeight.w600,
-                  //         fontSize: 36,
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
                   const SizedBox(height: 10.0),
                   const Text(
                     'Berikan kemudahan!',
