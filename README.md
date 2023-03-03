@@ -1,4 +1,4 @@
-# myspp_app
+# MySpp
 
 A new Flutter project.
 
