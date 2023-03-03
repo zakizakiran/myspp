@@ -1,22 +1,17 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
-import 'package:myspp_app/navigation/navbar.dart';
+import 'package:myspp_app/navigation/navbar_admin.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AuthenticatedSplash extends ConsumerStatefulWidget {
-  const AuthenticatedSplash({super.key});
+class AdminSplash extends ConsumerStatefulWidget {
+  const AdminSplash({super.key});
 
   @override
-  ConsumerState<AuthenticatedSplash> createState() =>
-      _AuthenticatedSplashState();
+  ConsumerState<AdminSplash> createState() => _AdminSplashState();
 }
 
-class _AuthenticatedSplashState extends ConsumerState<AuthenticatedSplash> {
-  int? isViewed;
-  User? user = FirebaseAuth.instance.currentUser;
-
+class _AdminSplashState extends ConsumerState<AdminSplash> {
   @override
   void initState() {
     super.initState();
@@ -31,9 +26,11 @@ class _AuthenticatedSplashState extends ConsumerState<AuthenticatedSplash> {
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
       splash: 'assets/img/logo.png',
-      nextScreen: Builder(builder: (context) {
-        return const Navigation();
-      }),
+      nextScreen: Builder(
+        builder: (context) {
+          return const AdminNavigation();
+        }
+      ),
       splashTransition: SplashTransition.fadeTransition,
       splashIconSize: 200,
     );

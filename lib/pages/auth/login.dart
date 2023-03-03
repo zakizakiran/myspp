@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
+import 'package:myspp_app/pages/auth/forgot_pass/forget_password.dart';
 import 'package:myspp_app/pages/onboard.dart';
 
 class Login extends ConsumerStatefulWidget {
@@ -63,7 +64,7 @@ class _LoginState extends ConsumerState<Login> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 12.0),
+                    const SizedBox(height: 20.0),
                     Form(
                       key: _formKey,
                       child: Padding(
@@ -74,18 +75,21 @@ class _LoginState extends ConsumerState<Login> {
                             TextFormField(
                               validator: ((value) {
                                 if (value!.isEmpty) {
-                                  return 'Mohon masukan email dengan benar';
+                                  return 'Email tidak boleh kosong';
                                 }
                                 return null;
                               }),
                               controller: email,
                               keyboardType: TextInputType.emailAddress,
-                              decoration: const InputDecoration(
-                                labelText: 'Email',
-                                labelStyle:
-                                    TextStyle(fontWeight: FontWeight.w600),
-                                icon: Icon(Icons.alternate_email_rounded),
-                              ),
+                              decoration: InputDecoration(
+                                  labelText: 'Email',
+                                  labelStyle: const TextStyle(
+                                      fontWeight: FontWeight.w600),
+                                  prefixIcon:
+                                      const Icon(Icons.alternate_email_rounded),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  )),
                               textInputAction: TextInputAction.next,
                             ),
                             const SizedBox(height: 18.0),
@@ -102,8 +106,13 @@ class _LoginState extends ConsumerState<Login> {
                                   labelText: 'Kata Sandi',
                                   labelStyle: const TextStyle(
                                       fontWeight: FontWeight.w600),
-                                  icon: const Icon(Icons.lock_outline_rounded),
+                                  prefixIcon:
+                                      const Icon(Icons.lock_outline_rounded),
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(20.0)),
                                   suffixIcon: IconButton(
+                                    splashColor: Colors.transparent,
                                     onPressed: () {
                                       setState(() {
                                         if (passenable) {
@@ -128,7 +137,13 @@ class _LoginState extends ConsumerState<Login> {
                         Padding(
                           padding: const EdgeInsets.only(right: 15.0),
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ForgetPassword()));
+                            },
                             child: const Text(
                               'Lupa kata sandi?',
                               style: TextStyle(
@@ -156,6 +171,7 @@ class _LoginState extends ConsumerState<Login> {
                                     .read(authControllerProvider.notifier)
                                     .emailPassSignIn(
                                         context, email.text, password.text);
+                                password.clear();
                                 setState(() {});
                                 if (!mounted) return;
                               }

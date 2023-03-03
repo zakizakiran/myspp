@@ -1,23 +1,25 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:myspp_app/navigation/screen_index.dart';
+import 'package:myspp_app/navigation/screen_index_admin.dart';
 
-class Navigation extends StatefulWidget {
-  const Navigation({super.key});
+class AdminNavigation extends StatefulWidget {
+  const AdminNavigation({super.key});
 
   @override
-  State<Navigation> createState() => _NavigationState();
+  State<AdminNavigation> createState() => _AdminNavigationState();
 }
 
-class _NavigationState extends State<Navigation> {
+class _AdminNavigationState extends State<AdminNavigation> {
   int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: screens().elementAt(_selectedIndex),
+      body: screensAdmin().elementAt(_selectedIndex),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
         child: GNav(
+          mainAxisAlignment: MainAxisAlignment.center,
           rippleColor: Colors.grey[300]!,
           hoverColor: Colors.grey[100]!,
           gap: 8,
@@ -29,20 +31,16 @@ class _NavigationState extends State<Navigation> {
           color: Colors.black,
           tabs: const [
             GButton(
-              icon: Icons.home,
+              icon: EvaIcons.home,
               text: 'Home',
             ),
             GButton(
-              icon: Icons.person,
-              text: 'Likes',
+              icon: Icons.history,
+              text: 'Riwayat',
             ),
             GButton(
-              icon: Icons.search,
-              text: 'Search',
-            ),
-            GButton(
-              icon: Icons.abc,
-              text: 'Profile',
+              icon: EvaIcons.settings,
+              text: 'Settings',
             ),
           ],
           selectedIndex: _selectedIndex,

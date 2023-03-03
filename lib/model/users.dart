@@ -1,68 +1,74 @@
 class Users {
   String? uid;
-  String? name;
+  String? nama;
   String? nis;
+  String? nisn;
   String? email;
-  String? photoUrl;
-  String? about;
-  String? grade;
+  String? kelas;
   String? role;
+  String? telp;
+  String? alamat;
 
   Users({
     this.uid,
-    this.name,
+    this.nama,
     this.nis,
+    this.nisn,
     this.email,
-    this.photoUrl,
-    this.about,
-    this.grade,
+    this.kelas,
+    this.telp,
+    this.alamat,
     this.role,
   });
 
   factory Users.fromJson(Map<String, dynamic> json) {
     return Users(
       uid: json['uid'],
-      name: json['name'],
+      nama: json['nama'],
       nis: json['nis'],
+      nisn: json['nisn'],
       email: json['email'],
-      photoUrl: json['photoUrl'],
-      about: json['about'],
-      grade: json['grade'],
+      kelas: json['kelas'],
+      alamat: json['alamat'],
       role: json['role'],
+      telp: json['telp']
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'uid': uid,
-      'name': name,
+      'nama': nama,
       'nis': nis,
+      'nisn': nisn,
       'email': email,
-      'photoUrl': photoUrl,
-      'about': about,
-      'grade': grade,
+      'kelas': kelas,
+      'telp' : telp,
+      'alamat' : alamat,
       'role': role,
     };
   }
 
   Users copyWith({
     String? uid,
-    String? name,
+    String? nama,
     String? nis,
+    String? nisn,
     String? email,
-    String? photoUrl,
-    String? about,
-    String? grade,
+    String? kelas,
+    String? telp,
+    String? alamat,
     String? role,
   }) {
     return Users(
       uid: uid ?? this.uid,
-      name: name ?? this.name,
+      nama: nama ?? this.nama,
       nis: nis ?? this.nis,
+      nisn: nisn ?? this.nisn,
       email: email ?? this.email,
-      photoUrl: photoUrl ?? this.photoUrl,
-      about: about ?? this.about,
-      grade: grade ?? this.grade,
+      kelas: kelas ?? this.kelas,
+      telp: telp ?? this.telp,
+      alamat: alamat ?? this.alamat,
       role: role ?? this.role,
     );
   }

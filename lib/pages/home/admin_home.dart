@@ -1,31 +1,35 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:myspp_app/components/animations/showup.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
+import 'package:myspp_app/pages/pengguna/data_pengguna.dart';
+import 'package:myspp_app/pages/siswa/data_siswa.dart';
 
-class Home extends ConsumerStatefulWidget {
-  const Home({super.key});
+class AdminHome extends ConsumerStatefulWidget {
+  const AdminHome({super.key});
 
   @override
-  ConsumerState<Home> createState() => _HomeState();
+  ConsumerState<AdminHome> createState() => _AdminHomeState();
 }
 
-class _HomeState extends ConsumerState<Home> {
+class _AdminHomeState extends ConsumerState<AdminHome> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(authControllerProvider);
     String nama = user.nama.toString();
-
     return Scaffold(
       endDrawer: Drawer(
+        elevation: 0,
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 18.0),
             child: Column(
               children: [
                 const Text(
-                  'Transaksi Terakhir Anda',
+                  'Pengguna Online',
                   style: TextStyle(
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600,
@@ -51,12 +55,12 @@ class _HomeState extends ConsumerState<Home> {
                   width: 250,
                   child: Card(
                     elevation: 0,
-                    color: HexColor('CFE2FF'),
+                    color: HexColor('D1E7DD'),
                     child: Center(
                         child: Text(
-                      '12/28/2023',
+                      'Budi Hartanto',
                       style: TextStyle(
-                        color: HexColor('0A58CA'),
+                        color: HexColor('198754'),
                         fontWeight: FontWeight.w600,
                       ),
                     )),
@@ -72,7 +76,7 @@ class _HomeState extends ConsumerState<Home> {
         children: [
           SafeArea(
             child: SizedBox(
-              height: 250,
+              height: MediaQuery.of(context).size.height * 0.1,
               child: Card(
                 margin: EdgeInsets.zero,
                 shape: const RoundedRectangleBorder(
@@ -88,7 +92,7 @@ class _HomeState extends ConsumerState<Home> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(12.0),
+                          padding: const EdgeInsets.only(left: 20.0, top: 12.0),
                           child: Column(
                             children: [
                               Column(
@@ -123,65 +127,85 @@ class _HomeState extends ConsumerState<Home> {
                         }),
                       ],
                     ),
-                    const SizedBox(height: 15.0),
-                    SvgPicture.asset(
-                      'assets/img/transfer.svg',
-                      width: 150.0,
-                    )
                   ],
                 ),
               ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.fromLTRB(20.0, 40.0, 0, 40.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Text(
-                      'Tagihan Anda',
-                      style: TextStyle(color: Colors.white, fontSize: 18.0),
-                    ),
-                    const SizedBox(width: 8.0),
-                    SvgPicture.asset('assets/img/coins.svg')
-                  ],
-                ),
-                const SizedBox(height: 12.0),
-                const Text(
-                  'Rp. 700.000',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
+          const SizedBox(height: 40.0),
+          SvgPicture.asset(
+            'assets/img/admin2.svg',
+            width: 150.0,
+          ),
+          const SizedBox(height: 40.0),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.55,
+            child: ShowUp(
+              delay: 100,
+              child: Card(
+                margin: EdgeInsets.zero,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16.0),
+                    topRight: Radius.circular(16.0),
                   ),
                 ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.48,
-            child: Card(
-              margin: EdgeInsets.zero,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16.0),
-                  topRight: Radius.circular(16.0),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20.0, 35.0, 20.0, 0.0),
-                child: GridView.count(
-                  physics: const NeverScrollableScrollPhysics(),
-                  childAspectRatio: 10 / 8,
-                  mainAxisSpacing: 12.0,
-                  crossAxisSpacing: 12.0,
-                  crossAxisCount: 3,
-                  children: [
-                    menuWidget(() {}, 'assets/img/bayarWidget.svg'),
-                    menuWidget(() {}, 'assets/img/riwayatWidget.svg'),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Dashboard',
+                              style: TextStyle(
+                                  fontSize: 26.0, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 10.0),
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(5)),
+                                  color: HexColor("204FA1")),
+                              width: 50,
+                              height: 5,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 30.0),
+                      Expanded(
+                        child: GridView.count(
+                          physics: const NeverScrollableScrollPhysics(),
+                          childAspectRatio: 10 / 9,
+                          mainAxisSpacing: 20.0,
+                          crossAxisSpacing: 12.0,
+                          crossAxisCount: 3,
+                          children: [
+                            menuWidget(() {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const DataSiswa()));
+                            }, 'assets/img/siswaWidget.svg'),
+                            menuWidget(() {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const DataPengguna()));
+                            }, 'assets/img/penggunaWidget.svg'),
+                            menuWidget(
+                                () {}, 'assets/img/pembayaranWidget.svg'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -191,13 +215,17 @@ class _HomeState extends ConsumerState<Home> {
     );
   }
 
-  InkWell menuWidget(dynamic onTap, dynamic appIcon) {
-    return InkWell(
-      onTap: onTap,
+  menuWidget(dynamic onTap, dynamic appIcon) {
+    return TextButton(
+      onPressed: onTap,
       child: SvgPicture.asset(
         appIcon,
-        width: 10.0,
+        width: 100.0,
       ),
+      // child: SvgPicture.asset(
+      //   appIcon,
+      //   width: 10.0,
+      // ),
     );
   }
 }

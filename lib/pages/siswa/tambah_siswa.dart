@@ -1,26 +1,24 @@
-import 'dart:developer';
-
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myspp_app/components/snackbars.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:myspp_app/controller/auth_controller.dart';
+import 'package:myspp_app/controller/siswa_controller.dart';
 import 'package:myspp_app/model/classname_list.dart';
+import 'package:myspp_app/model/siswa.dart';
 
-class Register extends ConsumerStatefulWidget {
-  const Register({super.key});
+class TambahSiswa extends ConsumerStatefulWidget {
+  const TambahSiswa({super.key});
 
   @override
-  ConsumerState<Register> createState() => _RegisterState();
+  ConsumerState<TambahSiswa> createState() => _TambahSiswaState();
 }
 
-class _RegisterState extends ConsumerState<Register> {
+class _TambahSiswaState extends ConsumerState<TambahSiswa> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
   TextEditingController nis = TextEditingController();
   TextEditingController nama = TextEditingController();
   TextEditingController nisn = TextEditingController();
@@ -42,12 +40,10 @@ class _RegisterState extends ConsumerState<Register> {
 
   @override
   void dispose() {
-    email.dispose();
     nama.dispose();
     nis.dispose();
     nisn.dispose();
     telp.dispose();
-    password.dispose();
     alamat.dispose();
     super.dispose();
   }
@@ -153,82 +149,7 @@ class _RegisterState extends ConsumerState<Register> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
-                              style: const TextStyle(color: Colors.white),
-                              cursorColor: Colors.white,
-                              controller: email,
-                              decoration: InputDecoration(
-                                prefixIcon: const Icon(
-                                  Icons.alternate_email_rounded,
-                                  color: Colors.white,
-                                ),
-                                focusColor: Colors.white,
-                                focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    borderSide: BorderSide(
-                                        color: HexColor('204FA1'), width: 2)),
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    borderSide: const BorderSide(
-                                        color: Colors.white, width: 2)),
-                                labelText: 'Email',
-                                labelStyle: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white),
-                              ),
-                              textInputAction: TextInputAction.next,
-                            ),
-                            const SizedBox(height: 20.0),
-                            TextFormField(
-                              style: const TextStyle(color: Colors.white),
-                              cursorColor: Colors.white,
-                              validator: ((value) {
-                                if (value!.isEmpty) {
-                                  return 'Kata sandi tidak boleh kosong';
-                                }
-                                return null;
-                              }),
-                              controller: password,
-                              obscureText: passenable,
-                              decoration: InputDecoration(
-                                  labelText: 'Kata Sandi',
-                                  labelStyle: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white),
-                                  prefixIcon: const Icon(
-                                    Icons.lock_outline_rounded,
-                                    color: Colors.white,
-                                  ),
-                                  focusColor: Colors.white,
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                          color: HexColor('204FA1'), width: 2)),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: const BorderSide(
-                                          color: Colors.white, width: 2)),
-                                  suffixIcon: IconButton(
-                                    splashColor: Colors.transparent,
-                                    onPressed: () {
-                                      setState(() {
-                                        if (passenable) {
-                                          passenable = false;
-                                        } else {
-                                          passenable = true;
-                                        }
-                                      });
-                                    },
-                                    icon: Icon(
-                                      passenable == true
-                                          ? Icons.visibility_off_rounded
-                                          : Icons.visibility_rounded,
-                                      color: Colors.white,
-                                    ),
-                                  )),
-                              textInputAction: TextInputAction.next,
-                            ),
-                            const SizedBox(height: 20.0),
-                            TextFormField(
+                              keyboardType: TextInputType.number,
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
                               controller: nisn,
@@ -255,6 +176,7 @@ class _RegisterState extends ConsumerState<Register> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
+                              keyboardType: TextInputType.number,
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
                               controller: nis,
@@ -281,6 +203,7 @@ class _RegisterState extends ConsumerState<Register> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
+                              keyboardType: TextInputType.text,
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
                               controller: nama,
@@ -341,7 +264,7 @@ class _RegisterState extends ConsumerState<Register> {
                                     fontWeight: FontWeight.w700),
                                 dropdownElevation: 1,
                                 scrollbarThickness: 5,
-                                scrollbarAlwaysShow: true,
+                                scrollbarAlwaysShow: false,
                                 scrollbarRadius: const Radius.circular(40),
                                 onChanged: (newValue) {
                                   setState(() {
@@ -388,6 +311,7 @@ class _RegisterState extends ConsumerState<Register> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
+                              keyboardType: TextInputType.phone,
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
                               controller: telp,
@@ -433,24 +357,26 @@ class _RegisterState extends ConsumerState<Register> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.0))),
                       onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          try {
-                            await ref
-                                .read(authControllerProvider.notifier)
-                                .emailPassSignUp(
-                                    context,
-                                    email.text,
-                                    password.text,
-                                    nama.text,
-                                    _currentclass.toString(),
-                                    telp.text,
-                                    nis.text,
-                                    nisn.text,
-                                    alamat.text);
-                            setState(() {});
-                          } on FirebaseAuthException catch (e) {
-                            log(e.message.toString());
-                          }
+                        try {
+                          Siswa siswa = Siswa(
+                              nisn: nisn.text,
+                              nis: nis.text,
+                              nama: nama.text,
+                              alamat: alamat.text,
+                              kelas: _currentclass,
+                              telp: telp.text);
+                          await ref
+                              .read(siswaControllerProvider.notifier)
+                              .tambahSiswa(context: context, siswa: siswa);
+                          setState(() {});
+                          if (!mounted) return;
+                          Navigator.pop(context);
+                          Snackbars().successSnackbars(
+                              context, 'Berhasil', 'Berhasil Menambah Siswa');
+                          Navigator.pop(context);
+                        } on FirebaseException catch (e) {
+                          Snackbars().failedSnackbars(
+                              context, 'Gagal', e.message.toString());
                         }
                       },
                       child: const Text(
@@ -491,7 +417,7 @@ class _RegisterState extends ConsumerState<Register> {
                     padding: const EdgeInsets.all(10.0),
                     width: 150,
                     child: const Text(
-                        'Perhatikan saat anda akan mendaftar. Isilah data dengan benar.',
+                        'Perhatikan saat anda akan menambah data siswa. Isilah data dengan benar.',
                         style: TextStyle(
                           fontSize: 12.0,
                           fontFamily: 'Quicksand',

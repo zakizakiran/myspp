@@ -3,7 +3,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:myspp_app/controller/auth_controller.dart';
 import 'package:myspp_app/firebase_options.dart';
+import 'package:myspp_app/model/classname_list.dart';
+import 'package:myspp_app/pages/splash/admin_splash.dart';
 import 'package:myspp_app/pages/splash/authenticated_splash.dart';
 import 'package:myspp_app/pages/splash/splash.dart';
 
@@ -16,7 +19,7 @@ void main() async {
   );
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
+  await Classname().chooseClass();
   runApp(const ProviderScope(child: MySppApp()));
 }
 
@@ -28,9 +31,13 @@ class MySppApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(fontFamily: 'Quicksand'),
       debugShowCheckedModeBanner: false,
-      home: FirebaseAuth.instance.currentUser == null
-          ? const Splash()
-          : const AuthenticatedSplash(),
+      home: Builder(builder: (context) {
+        return FirebaseAuth.instance.currentUser == null
+            ? const Splash()
+            : AuthController().routeIsAdmin(context)
+                ? const AdminSplash()
+                : const AuthenticatedSplash();
+      }),
     );
   }
 }
