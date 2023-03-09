@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class RiwayatPembayaran extends StatefulWidget {
@@ -10,6 +13,9 @@ class RiwayatPembayaran extends StatefulWidget {
 class _RiwayatPembayaranState extends State<RiwayatPembayaran> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return const Scaffold(
+        body: Center(
+      child: Text('Riwayat Pembayaran'),
+    ));
   }
 }

@@ -13,6 +13,7 @@ import 'package:myspp_app/components/snackbars.dart';
 import 'package:myspp_app/controller/siswa_controller.dart';
 import 'package:myspp_app/model/siswa.dart';
 import 'package:myspp_app/pages/siswa/detail_siswa.dart';
+import 'package:myspp_app/pages/siswa/edit_siswa.dart';
 import 'package:myspp_app/pages/siswa/tambah_siswa.dart';
 
 class DataSiswa extends ConsumerStatefulWidget {
@@ -195,58 +196,84 @@ class _DataSiswaState extends ConsumerState<DataSiswa> {
                                           color: HexColor('204FA1'),
                                           child: InkWell(
                                             onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        DetailSiswa(
-                                                            siswa: search.text
-                                                                    .isNotEmpty
-                                                                ? siswaResult[
-                                                                    index]
-                                                                : siswas[
-                                                                    index]),
-                                                  ));
+                                              DetailBottomSheet(
+                                                  siswa: siswas[index],
+                                                  result: index,
+                                                  context: context,
+                                                  detailButton: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              DetailSiswa(
+                                                                  siswa: search
+                                                                          .text
+                                                                          .isNotEmpty
+                                                                      ? siswaResult[
+                                                                          index]
+                                                                      : siswas[
+                                                                          index]),
+                                                        ));
+                                                  },
+                                                  editButton: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) => EditSiswa(
+                                                              siswa: search.text
+                                                                      .isNotEmpty
+                                                                  ? siswaResult[
+                                                                      index]
+                                                                  : siswas[
+                                                                      index]),
+                                                        ));
+                                                  });
                                             },
                                             onLongPress: () {
-                                              DeleteBottomSheet(context,
-                                                  () async {
-                                                try {
-                                                  await ref
-                                                      .read(siswaControllerProvider
-                                                          .notifier)
-                                                      .deleteSiswa(
-                                                          context: context,
-                                                          sid: search.text
-                                                                  .isNotEmpty
-                                                              ? siswaResult[
-                                                                      index]
-                                                                  .sid
-                                                                  .toString()
-                                                              : siswas[index]
-                                                                  .sid
+                                              DeleteBottomSheet(
+                                                  context: context,
+                                                  siswa: siswas[index],
+                                                  callback: () async {
+                                                    try {
+                                                      await ref
+                                                          .read(
+                                                              siswaControllerProvider
+                                                                  .notifier)
+                                                          .deleteSiswa(
+                                                              context: context,
+                                                              sid: search.text
+                                                                      .isNotEmpty
+                                                                  ? siswaResult[
+                                                                          index]
+                                                                      .sid
+                                                                      .toString()
+                                                                  : siswas[
+                                                                          index]
+                                                                      .sid
+                                                                      .toString());
+                                                      setState(() {});
+                                                      if (!mounted) return;
+                                                      Snackbars().successSnackbars(
+                                                          context,
+                                                          'Berhasil',
+                                                          'Berhasil Menghapus Data');
+                                                      Navigator.of(context)
+                                                        ..pop(context)
+                                                        ..pop(ctx);
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  const DataSiswa()));
+                                                    } on FirebaseException catch (e) {
+                                                      Snackbars()
+                                                          .failedSnackbars(
+                                                              context,
+                                                              'Gagal',
+                                                              e.message
                                                                   .toString());
-                                                  setState(() {});
-                                                  if (!mounted) return;
-                                                  Snackbars().successSnackbars(
-                                                      context,
-                                                      'Berhasil',
-                                                      'Berhasil Menghapus Data');
-                                                  Navigator.of(context)
-                                                    ..pop(context)
-                                                    ..pop(ctx);
-                                                  Navigator.pushReplacement(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              const DataSiswa()));
-                                                } on FirebaseException catch (e) {
-                                                  Snackbars().failedSnackbars(
-                                                      context,
-                                                      'Gagal',
-                                                      e.message.toString());
-                                                }
-                                              });
+                                                    }
+                                                  });
                                             },
                                             child: ListTile(
                                               title: Text(
@@ -303,27 +330,117 @@ class _DataSiswaState extends ConsumerState<DataSiswa> {
   }
 
   // ignore: non_constant_identifier_names
-  Future<dynamic> DeleteBottomSheet(
-      BuildContext context, VoidCallback callback) {
+  Future<dynamic> DetailBottomSheet(
+      {required BuildContext context,
+      required dynamic editButton,
+      required Siswa siswa,
+      required dynamic result,
+      required dynamic detailButton}) {
     return showMaterialModalBottomSheet(
         context: context,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
         // ignore: sized_box_for_whitespace
         builder: (context) => Container(
-              height: 120,
+              height: 250,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Center(
+                        child: Column(
+                      children: [
+                        Text(
+                          search.text.isNotEmpty
+                              ? siswaResult[result].nama.toString()
+                              : siswa.nama.toString(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16.0),
+                        ),
+                        const SizedBox(height: 10.0),
+                        Text(
+                          search.text.isNotEmpty
+                              ? siswaResult[result].nis.toString()
+                              : siswa.nis.toString(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16.0,
+                            color: Colors.grey[400],
+                          ),
+                        ),
+                      ],
+                    )),
+                    const SizedBox(height: 30.0),
+                    ElevatedButton.icon(
+                        icon: const Icon(EvaIcons.editOutline),
+                        style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0)),
+                            padding: const EdgeInsets.all(16.0),
+                            backgroundColor: HexColor('8D72E1')),
+                        onPressed: editButton,
+                        label: const Text(
+                          'Ubah Data Siswa',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16.0),
+                        )),
+                    const SizedBox(height: 15.0),
+                    ElevatedButton.icon(
+                        icon: const Icon(EvaIcons.eye),
+                        style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0)),
+                            side: BorderSide(color: HexColor('8D72E1')),
+                            padding: const EdgeInsets.all(16.0),
+                            backgroundColor: Colors.white,
+                            foregroundColor: HexColor('8D72E1')),
+                        onPressed: detailButton,
+                        label: const Text(
+                          'Lihat Detail Siswa',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16.0),
+                        )),
+                  ],
+                ),
+              ),
+            ));
+  }
+
+  // ignore: non_constant_identifier_names
+  Future<dynamic> DeleteBottomSheet(
+      {required BuildContext context,
+      required VoidCallback callback,
+      required Siswa siswa}) {
+    return showMaterialModalBottomSheet(
+        context: context,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+        // ignore: sized_box_for_whitespace
+        builder: (context) => Container(
+              height: 170,
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                     vertical: 18.0, horizontal: 40.0),
                 child: Column(
                   children: [
-                    const Text(
-                      'Apakah anda yakin untuk menghapus?',
+                    Text(
+                      siswa.nama.toString(),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16.0),
+                    ),
+                    const SizedBox(height: 10.0),
+                    Text(
+                      siswa.nis.toString(),
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
+                        fontSize: 16.0,
+                        color: Colors.grey[400],
                       ),
                     ),
-                    const SizedBox(height: 15.0),
+                    const SizedBox(height: 20.0),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [

@@ -1,14 +1,14 @@
-import 'dart:isolate';
-
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:myspp_app/components/skeleton_container.dart';
+import 'package:myspp_app/components/snackbars.dart';
 import 'package:myspp_app/controller/siswa_controller.dart';
 import 'package:myspp_app/model/siswa.dart';
-import 'package:myspp_app/pages/siswa/edit_siswa.dart';
+import 'package:myspp_app/pages/siswa/data_siswa.dart';
 
 class DetailSiswa extends ConsumerStatefulWidget {
   final Siswa? siswa;
@@ -20,6 +20,7 @@ class DetailSiswa extends ConsumerStatefulWidget {
 
 class _DetailSiswaState extends ConsumerState<DetailSiswa> {
   bool isloading = true;
+  int count = 0;
 
   @override
   void initState() {
@@ -74,16 +75,75 @@ class _DetailSiswaState extends ConsumerState<DetailSiswa> {
           Padding(
             padding: const EdgeInsets.only(right: 12.0),
             child: IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditSiswa(siswa: widget.siswa!),
-                      ));
+                onPressed: () async {
+                  showDialog(
+                      context: context,
+                      builder: (ctx) {
+                        return AlertDialog(
+                          actionsPadding: const EdgeInsets.all(20.0),
+                          actionsAlignment: MainAxisAlignment.spaceEvenly,
+                          title: const Text(
+                            'Apakah anda yakin untuk menghapusnya?',
+                            style: TextStyle(fontSize: 16.0),
+                          ),
+                          actions: [
+                            ElevatedButton(
+                              onPressed: () async {
+                                try {
+                                  await ref
+                                      .read(siswaControllerProvider.notifier)
+                                      .deleteSiswa(
+                                          context: context,
+                                          sid: widget.siswa!.sid.toString());
+                                  setState(() {});
+                                  if (!mounted) return;
+                                  Navigator.of(context)
+                                      .popUntil((_) => count++ >= 4);
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const DataSiswa(),
+                                      ));
+                                  Snackbars().successSnackbars(context,
+                                      'Berhasil', 'Berhasil Menghapus Data');
+                                } on FirebaseException catch (e) {
+                                  Snackbars().failedSnackbars(
+                                      context, 'Gagal', e.message.toString());
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  elevation: 0,
+                                  side:
+                                      const BorderSide(color: Colors.redAccent),
+                                  padding: const EdgeInsets.all(15.0),
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: Colors.redAccent,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(12.0))),
+                              child: const Text('Hapus'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  elevation: 0,
+                                  padding: const EdgeInsets.all(15.0),
+                                  backgroundColor: HexColor('204FA1'),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(12.0))),
+                              child: const Text('Tidak'),
+                            ),
+                          ],
+                        );
+                      });
                 },
                 icon: const Icon(
-                  EvaIcons.editOutline,
-                  size: 30.0,
+                  EvaIcons.trash2Outline,
+                  size: 25.0,
+                  color: Colors.redAccent,
                 )),
           )
         ],
@@ -156,6 +216,22 @@ class _DetailSiswaState extends ConsumerState<DetailSiswa> {
                               ),
                               Text(
                                 widget.siswa!.nama.toString(),
+                                style: const TextStyle(
+                                  fontSize: 16.0,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(height: 10.0),
+                              const Text(
+                                'Jurusan',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18.0,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                widget.siswa!.jurusan.toString(),
                                 style: const TextStyle(
                                   fontSize: 16.0,
                                   color: Colors.white,

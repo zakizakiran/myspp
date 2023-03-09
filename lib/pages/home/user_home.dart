@@ -4,14 +4,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
 
-class Home extends ConsumerStatefulWidget {
-  const Home({super.key});
+class UserHome extends ConsumerStatefulWidget {
+  const UserHome({super.key});
 
   @override
-  ConsumerState<Home> createState() => _HomeState();
+  ConsumerState<UserHome> createState() => _UserHomeState();
 }
 
-class _HomeState extends ConsumerState<Home> {
+class _UserHomeState extends ConsumerState<UserHome> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(authControllerProvider);
@@ -179,8 +179,7 @@ class _HomeState extends ConsumerState<Home> {
                   crossAxisSpacing: 12.0,
                   crossAxisCount: 3,
                   children: [
-                    menuWidget(() {}, 'assets/img/bayarWidget.svg'),
-                    menuWidget(() {}, 'assets/img/riwayatWidget.svg'),
+                    menuWidget(() {}, 'assets/img/pembayaranWidget.svg'),
                   ],
                 ),
               ),

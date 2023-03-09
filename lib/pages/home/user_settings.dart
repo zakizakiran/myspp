@@ -5,14 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
 
-class Settings extends ConsumerStatefulWidget {
-  const Settings({super.key});
+class UserSettings extends ConsumerStatefulWidget {
+  const UserSettings({super.key});
 
   @override
-  ConsumerState<Settings> createState() => _SettingsState();
+  ConsumerState<UserSettings> createState() => _UserSettingsState();
 }
 
-class _SettingsState extends ConsumerState<Settings> {
+class _UserSettingsState extends ConsumerState<UserSettings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

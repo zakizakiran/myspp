@@ -1,13 +1,12 @@
 import 'package:aligned_dialog/aligned_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myspp_app/components/snackbars.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myspp_app/controller/siswa_controller.dart';
-import 'package:myspp_app/model/classname_list.dart';
 import 'package:myspp_app/model/siswa.dart';
 
 class TambahSiswa extends ConsumerStatefulWidget {
@@ -25,16 +24,17 @@ class _TambahSiswaState extends ConsumerState<TambahSiswa> {
   TextEditingController alamat = TextEditingController();
   TextEditingController telp = TextEditingController();
 
-  late List<DropdownMenuItem<String>> _dropDownMenuItems;
+  String? _selectedJurusan;
+  String? _selectedKelas;
 
-  String? _currentclass;
-  String? tier;
+  // Referensi collection "kelas" di Firestore
+  final CollectionReference _kelasRef =
+      FirebaseFirestore.instance.collection('kelas');
+
   bool passenable = true; //track password value
 
   @override
   void initState() {
-    _dropDownMenuItems = getDropDownMenuItem();
-    _currentclass = _dropDownMenuItems[0].value!;
     super.initState();
   }
 
@@ -46,19 +46,6 @@ class _TambahSiswaState extends ConsumerState<TambahSiswa> {
     telp.dispose();
     alamat.dispose();
     super.dispose();
-  }
-
-  List className = Classname.className;
-
-  List<DropdownMenuItem<String>> getDropDownMenuItem() {
-    List<DropdownMenuItem<String>> items = [];
-    for (String classes in className) {
-      items.add(DropdownMenuItem(
-        value: classes,
-        child: Text(classes),
-      ));
-    }
-    return items;
   }
 
   RegExp regexPass =
@@ -149,6 +136,7 @@ class _TambahSiswaState extends ConsumerState<TambahSiswa> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
+                              validator: (value) {},
                               keyboardType: TextInputType.number,
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
@@ -229,60 +217,157 @@ class _TambahSiswaState extends ConsumerState<TambahSiswa> {
                               textInputAction: TextInputAction.next,
                             ),
                             const SizedBox(height: 20.0),
-                            DropdownButtonHideUnderline(
-                              child: DropdownButtonFormField2(
-                                decoration: const InputDecoration.collapsed(
-                                    hintText: ''),
-                                validator: (val) {
-                                  if (val == null || val == '') {
-                                    return 'Please Choose Your Grade!';
+                            StreamBuilder<QuerySnapshot>(
+                                stream: _kelasRef.snapshots(),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return const CircularProgressIndicator();
                                   }
-                                  return null;
-                                },
-                                isExpanded: true,
-                                buttonDecoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(20.0)),
-                                    border: Border.all(
-                                        color: Colors.white, width: 2)),
-                                buttonHeight: 60,
-                                buttonPadding: const EdgeInsets.symmetric(
-                                    horizontal: 14.0),
-                                items: _dropDownMenuItems,
-                                value: _currentclass,
-                                itemPadding:
-                                    const EdgeInsets.only(left: 14, right: 14),
-                                dropdownMaxHeight: 150,
-                                dropdownDecoration: BoxDecoration(
-                                    color: HexColor('204FA1'),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(10))),
-                                iconEnabledColor: Colors.white,
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w700),
-                                dropdownElevation: 1,
-                                scrollbarThickness: 5,
-                                scrollbarAlwaysShow: false,
-                                scrollbarRadius: const Radius.circular(40),
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    _currentclass = newValue;
-                                    if (newValue!.startsWith('I', 3)) {
-                                      tier = 'XIII';
-                                    } else if (newValue.startsWith('I', 2)) {
-                                      tier = 'XII';
-                                    } else if (newValue.startsWith('I', 1)) {
-                                      tier = 'XI';
-                                    } else {
-                                      tier = 'X';
+                                  List<String> jurusanList = [];
+                                  for (var doc in snapshot.data!.docs) {
+                                    String jurusan = doc['jurusan'];
+                                    if (!jurusanList.contains(jurusan)) {
+                                      jurusanList.add(jurusan);
                                     }
-                                  });
-                                  // Logger().i(tier);
-                                },
-                              ),
-                            ),
+                                  }
+                                  return DropdownButtonFormField2(
+                                    decoration: const InputDecoration.collapsed(
+                                        hintText: ''),
+                                    validator: (val) {
+                                      if (val == null || val == '') {
+                                        return 'Jurusan tidak boleh kosong';
+                                      }
+                                      return null;
+                                    },
+                                    isExpanded: true,
+                                    buttonDecoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(20.0)),
+                                        border: Border.all(
+                                            color: Colors.white, width: 2)),
+                                    buttonHeight: 60,
+                                    buttonPadding: const EdgeInsets.symmetric(
+                                        horizontal: 14.0),
+                                    hint: const Text(
+                                      'Pilih Jurusan',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: 'Quicksand'),
+                                    ),
+                                    value: _selectedJurusan,
+                                    items: jurusanList.map((jurusan) {
+                                      return DropdownMenuItem(
+                                        value: jurusan,
+                                        child: Text(
+                                          jurusan,
+                                          style: const TextStyle(
+                                              fontFamily: 'Quicksand'),
+                                        ),
+                                      );
+                                    }).toList(),
+                                    itemPadding: const EdgeInsets.only(
+                                        left: 14, right: 14),
+                                    dropdownMaxHeight: 150,
+                                    dropdownDecoration: BoxDecoration(
+                                        color: HexColor('204FA1'),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(10))),
+                                    iconEnabledColor: Colors.white,
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700),
+                                    dropdownElevation: 1,
+                                    scrollbarThickness: 5,
+                                    scrollbarAlwaysShow: false,
+                                    scrollbarRadius: const Radius.circular(40),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _selectedJurusan = value;
+                                        _selectedKelas =
+                                            null; // reset kelas saat jurusan berubah
+                                      });
+                                    },
+                                  );
+                                }),
+                            _selectedJurusan != null
+                                ? StreamBuilder<QuerySnapshot>(
+                                    stream: _kelasRef
+                                        .where('jurusan',
+                                            isEqualTo: _selectedJurusan)
+                                        .snapshots(),
+                                    builder: (context, snapshot) {
+                                      if (!snapshot.hasData) {
+                                        return const CircularProgressIndicator();
+                                      }
+                                      List<dynamic> kelasList = [];
+                                      for (var doc in snapshot.data!.docs) {
+                                        kelasList.addAll(doc['nama_kelas']);
+                                      }
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 20.0),
+                                        child: DropdownButtonFormField2(
+                                          decoration:
+                                              const InputDecoration.collapsed(
+                                                  hintText: ''),
+                                          validator: (val) {
+                                            if (val == null || val == '') {
+                                              return 'Please Choose Your Grade!';
+                                            }
+                                            return null;
+                                          },
+                                          isExpanded: true,
+                                          buttonDecoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(20.0)),
+                                              border: Border.all(
+                                                  color: Colors.white,
+                                                  width: 2)),
+                                          buttonHeight: 60,
+                                          buttonPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 14.0),
+                                          hint: const Text(
+                                            'Pilih Kelas',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: 'Quicksand'),
+                                          ),
+                                          value: _selectedKelas,
+                                          items: kelasList.map((jurusan) {
+                                            return DropdownMenuItem(
+                                              value: jurusan,
+                                              child: Text(jurusan),
+                                            );
+                                          }).toList(),
+                                          itemPadding: const EdgeInsets.only(
+                                              left: 14, right: 14),
+                                          dropdownMaxHeight: 150,
+                                          dropdownDecoration: BoxDecoration(
+                                              color: HexColor('204FA1'),
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(10))),
+                                          iconEnabledColor: Colors.white,
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w700),
+                                          dropdownElevation: 1,
+                                          scrollbarThickness: 5,
+                                          scrollbarAlwaysShow: false,
+                                          scrollbarRadius:
+                                              const Radius.circular(40),
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              _selectedKelas =
+                                                  newValue.toString();
+                                            });
+                                          },
+                                        ),
+                                      );
+                                    })
+                                : const SizedBox(height: 0),
                             const SizedBox(height: 20.0),
                             TextFormField(
                               controller: alamat,
@@ -363,7 +448,8 @@ class _TambahSiswaState extends ConsumerState<TambahSiswa> {
                               nis: nis.text,
                               nama: nama.text,
                               alamat: alamat.text,
-                              kelas: _currentclass,
+                              kelas: _selectedKelas,
+                              jurusan: _selectedJurusan,
                               telp: telp.text);
                           await ref
                               .read(siswaControllerProvider.notifier)

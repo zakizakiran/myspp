@@ -6,13 +6,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:logger/logger.dart';
+import 'package:myspp_app/components/snackbars.dart';
 import 'package:myspp_app/model/users.dart';
 import 'package:myspp_app/navigation/navbar.dart';
 import 'package:myspp_app/navigation/navbar_admin.dart';
 import 'package:myspp_app/pages/auth/forgot_pass/mail_check.dart';
 import 'package:myspp_app/pages/auth/login.dart';
 import 'package:myspp_app/pages/splash/admin_splash.dart';
-import 'package:myspp_app/pages/splash/authenticated_splash.dart';
+import 'package:myspp_app/pages/splash/user_splash.dart';
 
 class AuthController extends StateNotifier<Users> {
   AuthController() : super(Users());
@@ -42,29 +43,14 @@ class AuthController extends StateNotifier<Users> {
           state = users;
         }
       }
-
-      AnimatedSnackBar.rectangle(
-        'Login Success',
-        'Welcome back here!',
-        type: AnimatedSnackBarType.success,
-        brightness: Brightness.light,
-        mobileSnackBarPosition: MobileSnackBarPosition.bottom,
-        duration: const Duration(milliseconds: 10),
-      ).show(
-        context,
-      );
+      if (!mounted) return;
+      Snackbars().successSnackbars(
+          context, 'Berhasil Masuk', 'Selamat Datang di MySpp');
       Navigator.of(context).popUntil((route) => route.isFirst);
       route(context);
     } on FirebaseAuthException catch (e) {
       var error = e.message.toString();
-      AnimatedSnackBar.rectangle('Login Failed', error,
-              type: AnimatedSnackBarType.error,
-              brightness: Brightness.light,
-              mobileSnackBarPosition: MobileSnackBarPosition.top,
-              duration: const Duration(milliseconds: 80))
-          .show(
-        context,
-      );
+      Snackbars().failedSnackbars(context, 'Gagal Masuk', error);
       Navigator.pop(context);
     }
   }
@@ -186,7 +172,7 @@ class AuthController extends StateNotifier<Users> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const Navigation(),
+              builder: (context) => const UserNavigation(),
             ),
           );
         }
@@ -217,7 +203,7 @@ class AuthController extends StateNotifier<Users> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const AuthenticatedSplash(),
+              builder: (context) => const UserSplash(),
             ),
           );
         }

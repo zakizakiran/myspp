@@ -5,15 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
 import 'package:myspp_app/navigation/navbar.dart';
 
-class AuthenticatedSplash extends ConsumerStatefulWidget {
-  const AuthenticatedSplash({super.key});
+class UserSplash extends ConsumerStatefulWidget {
+  const UserSplash({super.key});
 
   @override
-  ConsumerState<AuthenticatedSplash> createState() =>
-      _AuthenticatedSplashState();
+  ConsumerState<UserSplash> createState() => UserSplashState();
 }
 
-class _AuthenticatedSplashState extends ConsumerState<AuthenticatedSplash> {
+class UserSplashState extends ConsumerState<UserSplash> {
   int? isViewed;
   User? user = FirebaseAuth.instance.currentUser;
 
@@ -32,7 +31,7 @@ class _AuthenticatedSplashState extends ConsumerState<AuthenticatedSplash> {
     return AnimatedSplashScreen(
       splash: 'assets/img/logo.png',
       nextScreen: Builder(builder: (context) {
-        return const Navigation();
+        return const UserNavigation();
       }),
       splashTransition: SplashTransition.fadeTransition,
       splashIconSize: 200,

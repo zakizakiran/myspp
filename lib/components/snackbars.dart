@@ -21,7 +21,7 @@ class Snackbars {
           color: Colors.white,
         ),
       ),
-      duration: const Duration(milliseconds: 3500),
+      duration: const Duration(milliseconds: 2000),
       animateFrom: AnimateFrom.fromBottom,
       backgroundColor: Colors.green,
       titleWidget: Text(
@@ -50,7 +50,6 @@ class Snackbars {
 
   failedSnackbars(BuildContext context, String title, String message) {
     SmartSnackBars.showTemplatedSnackbar(
-      persist: true,
       elevation: 2,
       animationCurve: Curves.fastLinearToSlowEaseIn,
       leading: Container(
@@ -66,7 +65,7 @@ class Snackbars {
         ),
       ),
       animateFrom: AnimateFrom.fromBottom,
-      duration: const Duration(milliseconds: 3500),
+      duration: const Duration(milliseconds: 2500),
       backgroundColor: Colors.red,
       titleWidget: Text(
         title,
@@ -76,7 +75,7 @@ class Snackbars {
             fontWeight: FontWeight.w700),
       ),
       subTitleWidget: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.7,
+        width: MediaQuery.of(context).size.width * 0.5,
         child: Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child: Text(

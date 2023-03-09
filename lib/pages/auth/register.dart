@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
-import 'package:myspp_app/model/classname_list.dart';
 
 class Register extends ConsumerStatefulWidget {
   const Register({super.key});
@@ -35,8 +34,6 @@ class _RegisterState extends ConsumerState<Register> {
 
   @override
   void initState() {
-    _dropDownMenuItems = getDropDownMenuItem();
-    _currentclass = _dropDownMenuItems[0].value!;
     super.initState();
   }
 
@@ -50,19 +47,6 @@ class _RegisterState extends ConsumerState<Register> {
     password.dispose();
     alamat.dispose();
     super.dispose();
-  }
-
-  List className = Classname.className;
-
-  List<DropdownMenuItem<String>> getDropDownMenuItem() {
-    List<DropdownMenuItem<String>> items = [];
-    for (String classes in className) {
-      items.add(DropdownMenuItem(
-        value: classes,
-        child: Text(classes),
-      ));
-    }
-    return items;
   }
 
   RegExp regexPass =

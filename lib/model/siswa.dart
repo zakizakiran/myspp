@@ -4,6 +4,7 @@ class Siswa {
   String? nis;
   String? nisn;
   String? kelas;
+  String? jurusan;
   String? telp;
   String? alamat;
 
@@ -13,6 +14,7 @@ class Siswa {
     this.nis,
     this.nisn,
     this.kelas,
+    this.jurusan,
     this.telp,
     this.alamat,
   });
@@ -24,6 +26,7 @@ class Siswa {
         nis: json['nis'],
         nisn: json['nisn'],
         kelas: json['kelas'],
+        jurusan: json['jurusan'],
         alamat: json['alamat'],
         telp: json['telp']);
   }
@@ -35,6 +38,7 @@ class Siswa {
       'nis': nis,
       'nisn': nisn,
       'kelas': kelas,
+      'jurusan': jurusan,
       'telp': telp,
       'alamat': alamat,
     };
@@ -46,6 +50,7 @@ class Siswa {
     String? nis,
     String? nisn,
     String? kelas,
+    String? jurusan,
     String? telp,
     String? alamat,
   }) {
@@ -55,6 +60,7 @@ class Siswa {
       nis: nis ?? this.nis,
       nisn: nisn ?? this.nisn,
       kelas: kelas ?? this.kelas,
+      jurusan: jurusan ?? this.jurusan,
       telp: telp ?? this.telp,
       alamat: alamat ?? this.alamat,
     );

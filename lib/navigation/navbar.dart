@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:myspp_app/navigation/screen_index.dart';
+import 'package:myspp_app/navigation/screen_index_user.dart';
 
-class Navigation extends StatefulWidget {
-  const Navigation({super.key});
+class UserNavigation extends StatefulWidget {
+  const UserNavigation({super.key});
 
   @override
-  State<Navigation> createState() => _NavigationState();
+  State<UserNavigation> createState() => _UserNavigationState();
 }
 
-class _NavigationState extends State<Navigation> {
+class _UserNavigationState extends State<UserNavigation> {
   int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
