@@ -55,6 +55,7 @@ class MailCheckState extends State<MailCheck> {
                         // There is no native intent/default app system in iOS so
                         // you have to do it yourself.
                       } else if (!result.didOpen && result.canOpen) {
+                        // ignore: use_build_context_synchronously
                         showDialog(
                           context: context,
                           builder: (_) {
