@@ -5,7 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myspp_app/components/animations/showup.dart';
-import 'package:myspp_app/components/snackbars.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
 import 'package:myspp_app/controller/log_history_controller.dart';
 import 'package:myspp_app/model/log_history.dart';
