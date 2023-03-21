@@ -153,45 +153,45 @@ class _DataPenggunaState extends ConsumerState<DataPengguna> {
                                       color: HexColor('204FA1'),
                                       child: InkWell(
                                         onLongPress: () {
-                                          DeleteBottomSheet(
-                                            context: context,
-                                            result: index,
-                                            users: usersData[index],
-                                            callback: () async {
-                                              // try {
-                                              //   ref
-                                              //       .read(
-                                              //           usersControllerProvider
-                                              //               .notifier)
-                                              //       .deleteUser(
-                                              //           context: context,
-                                              //           email: usersData[index]
-                                              //               .email
-                                              //               .toString(),
-                                              //           password: )
-                                              //       .toString();
-                                              //   setState(() {});
-                                              //   if (!mounted) return;
-                                              //   Snackbars().successSnackbars(
-                                              //       context,
-                                              //       'Berhasil',
-                                              //       'Berhasil Menghapus Data');
-                                              //   Navigator.of(context)
-                                              //     ..pop(context)
-                                              //     ..pop(ctx);
-                                              //   Navigator.pushReplacement(
-                                              //       context,
-                                              //       MaterialPageRoute(
-                                              //           builder: (context) =>
-                                              //               const DataPengguna()));
-                                              // } on FirebaseException catch (e) {
-                                              //   Snackbars().failedSnackbars(
-                                              //       context,
-                                              //       'Gagal',
-                                              //       e.message.toString());
-                                              // }
-                                            },
-                                          );
+                                          // DeleteBottomSheet(
+                                          //   context: context,
+                                          //   result: index,
+                                          //   users: usersData[index],
+                                          //   callback: () async {
+                                          //     try {
+                                          //       ref
+                                          //           .read(
+                                          //               usersControllerProvider
+                                          //                   .notifier)
+                                          //           .deleteUser(
+                                          //               context: context,
+                                          //               email: usersData[index]
+                                          //                   .email
+                                          //                   .toString(),
+                                          //               password: )
+                                          //           .toString();
+                                          //       setState(() {});
+                                          //       if (!mounted) return;
+                                          //       Snackbars().successSnackbars(
+                                          //           context,
+                                          //           'Berhasil',
+                                          //           'Berhasil Menghapus Data');
+                                          //       Navigator.of(context)
+                                          //         ..pop(context)
+                                          //         ..pop(ctx);
+                                          //       Navigator.pushReplacement(
+                                          //           context,
+                                          //           MaterialPageRoute(
+                                          //               builder: (context) =>
+                                          //                   const DataPengguna()));
+                                          //     } on FirebaseException catch (e) {
+                                          //       Snackbars().failedSnackbars(
+                                          //           context,
+                                          //           'Gagal',
+                                          //           e.message.toString());
+                                          //     }
+                                          //   },
+                                          // );
                                         },
                                         child: ListTile(
                                           title: Text(
@@ -310,4 +310,5 @@ class _DataPenggunaState extends ConsumerState<DataPengguna> {
               ),
             ));
   }
+
 }
