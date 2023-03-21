@@ -1,9 +1,12 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:myspp_app/components/snackbars.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
+import 'package:myspp_app/controller/log_history_controller.dart';
 
 class AdminSettings extends ConsumerStatefulWidget {
   const AdminSettings({super.key});
@@ -15,6 +18,7 @@ class AdminSettings extends ConsumerStatefulWidget {
 class _AdminSettingsState extends ConsumerState<AdminSettings> {
   @override
   Widget build(BuildContext context) {
+    int count = 0;
     return Scaffold(
       appBar: AppBar(
         // title: const Text(
@@ -54,20 +58,101 @@ class _AdminSettingsState extends ConsumerState<AdminSettings> {
         ),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () async {
-            try {
-              await ref.read(authControllerProvider.notifier).signOut(context);
-            } on FirebaseAuthException {
-              AnimatedSnackBar.rectangle(
-                'Logout Failed',
-                '',
-                type: AnimatedSnackBarType.error,
-                mobileSnackBarPosition: MobileSnackBarPosition.bottom,
-              );
-            }
-          },
-          child: const Text('Logout'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  await ref
+                      .read(authControllerProvider.notifier)
+                      .signOut(context);
+                } on FirebaseAuthException {
+                  AnimatedSnackBar.rectangle(
+                    'Logout Failed',
+                    '',
+                    type: AnimatedSnackBarType.error,
+                    mobileSnackBarPosition: MobileSnackBarPosition.bottom,
+                  );
+                }
+              },
+              child: const Text('Logout'),
+            ),
+            ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: HexColor('204FA1')),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          actionsPadding: const EdgeInsets.all(20.0),
+                          actionsAlignment: MainAxisAlignment.spaceEvenly,
+                          title: const Text(
+                            'Apakah anda yakin untuk menghapusnya?',
+                            style: TextStyle(fontSize: 16.0),
+                          ),
+                          actions: [
+                            ElevatedButton(
+                              onPressed: () async {
+                                try {
+                                  await ref
+                                      .read(
+                                          logHistoryControllerProvider.notifier)
+                                      .deleteAllLog(
+                                          context: context,
+                                          email: FirebaseAuth
+                                              .instance.currentUser!.email
+                                              .toString());
+                                  setState(() {});
+                                  if (!mounted) return;
+                                  Navigator.of(context)
+                                      .popUntil((_) => count++ >= 2);
+                                  Snackbars().successSnackbars(
+                                      context,
+                                      'Berhasil',
+                                      'Berhasil Menghapus Aktivitas');
+                                } on FirebaseException catch (e) {
+                                  Snackbars().failedSnackbars(
+                                      context, 'Gagal', e.message.toString());
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  elevation: 0,
+                                  side:
+                                      const BorderSide(color: Colors.redAccent),
+                                  padding: const EdgeInsets.all(15.0),
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: Colors.redAccent,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(12.0))),
+                              child: const Text('Hapus'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  elevation: 0,
+                                  padding: const EdgeInsets.all(15.0),
+                                  backgroundColor: HexColor('204FA1'),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(12.0))),
+                              child: const Text('Tidak'),
+                            ),
+                          ],
+                        );
+                      });
+                },
+                label: const Text('Hapus semua aktivitas'),
+                icon: const Icon(
+                  EvaIcons.trash2Outline,
+                  color: Colors.redAccent,
+                ))
+          ],
         ),
       ),
     );
