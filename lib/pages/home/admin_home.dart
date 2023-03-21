@@ -52,7 +52,7 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const SizedBox(),
+                      SizedBox(width: MediaQuery.of(context).size.width * 0.12),
                       const Text(
                         'Log Aktvitas',
                         style: TextStyle(
