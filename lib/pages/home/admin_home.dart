@@ -52,6 +52,14 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      const SizedBox(),
+                      const Text(
+                        'Log Aktvitas',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                       IconButton(
                         splashRadius: 20.0,
                         onPressed: () {
@@ -62,41 +70,34 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
                           size: 25.0,
                         ),
                       ),
-                      const Text(
-                        'Log Aktvitas',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      IconButton(
-                        splashRadius: 20.0,
-                        onPressed: () async {
-                          try {
-                            await ref
-                                .read(logHistoryControllerProvider.notifier)
-                                .deleteAllLog(
-                                    email: FirebaseAuth
-                                        .instance.currentUser!.email
-                                        .toString(),
-                                    context: context);
+                      // IconButton(
+                      //   splashRadius: 20.0,
+                      //   onPressed: () async {
+                      //     try {
+                      //       await ref
+                      //           .read(logHistoryControllerProvider.notifier)
+                      //           .deleteAllLog(
+                      //               email: FirebaseAuth
+                      //                   .instance.currentUser!.email
+                      //                   .toString(),
+                      //               context: context);
 
-                            setState(() {});
-                            if (!mounted) return;
-                            Snackbars().successSnackbars(
-                                context, 'Success', 'Successfully Deleted!');
-                            Navigator.pop(context);
-                          } on FirebaseException catch (e) {
-                            Navigator.pop(context);
-                            Snackbars().failedSnackbars(
-                                context, 'Failed To Delete Plan', e.toString());
-                          }
-                        },
-                        icon: const Icon(
-                          EvaIcons.trash2Outline,
-                          color: Colors.redAccent,
-                        ),
-                      ),
+                      //       setState(() {});
+                      //       if (!mounted) return;
+                      //       Snackbars().successSnackbars(
+                      //           context, 'Success', 'Successfully Deleted!');
+                      //       Navigator.pop(context);
+                      //     } on FirebaseException catch (e) {
+                      //       Navigator.pop(context);
+                      //       Snackbars().failedSnackbars(
+                      //           context, 'Failed To Delete Plan', e.toString());
+                      //     }
+                      //   },
+                      //   icon: const Icon(
+                      //     EvaIcons.trash2Outline,
+                      //     color: Colors.redAccent,
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
