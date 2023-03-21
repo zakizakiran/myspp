@@ -1,9 +1,14 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myspp_app/components/animations/showup.dart';
+import 'package:myspp_app/components/snackbars.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
+import 'package:myspp_app/controller/log_history_controller.dart';
+import 'package:myspp_app/model/log_history.dart';
 import 'package:myspp_app/pages/pengguna/data_pengguna.dart';
 import 'package:myspp_app/pages/siswa/data_siswa.dart';
 
@@ -16,8 +21,23 @@ class AdminHome extends ConsumerStatefulWidget {
 
 class _AdminHomeState extends ConsumerState<AdminHome> {
   @override
+  void initState() {
+    super.initState();
+    getAllLog();
+  }
+
+  List<LogHistory> logResult = [];
+
+  Future<void> getAllLog() async {
+    await ref
+        .read(logHistoryControllerProvider.notifier)
+        .getLog(email: FirebaseAuth.instance.currentUser!.email.toString());
+  }
+
+  @override
   Widget build(BuildContext context) {
     final user = ref.watch(authControllerProvider);
+    var logs = ref.watch(logHistoryControllerProvider);
     String nama = user.nama.toString();
     return Scaffold(
       endDrawer: Drawer(
@@ -27,11 +47,57 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
             padding: const EdgeInsets.symmetric(vertical: 18.0),
             child: Column(
               children: [
-                const Text(
-                  'Pengguna Online',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        splashRadius: 20.0,
+                        onPressed: () {
+                          getAllLog();
+                        },
+                        icon: const Icon(
+                          EvaIcons.refresh,
+                          size: 25.0,
+                        ),
+                      ),
+                      const Text(
+                        'Log Aktvitas',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      IconButton(
+                        splashRadius: 20.0,
+                        onPressed: () async {
+                          try {
+                            await ref
+                                .read(logHistoryControllerProvider.notifier)
+                                .deleteAllLog(
+                                    email: FirebaseAuth
+                                        .instance.currentUser!.email
+                                        .toString(),
+                                    context: context);
+
+                            setState(() {});
+                            if (!mounted) return;
+                            Snackbars().successSnackbars(
+                                context, 'Success', 'Successfully Deleted!');
+                            Navigator.pop(context);
+                          } on FirebaseException catch (e) {
+                            Navigator.pop(context);
+                            Snackbars().failedSnackbars(
+                                context, 'Failed To Delete Plan', e.toString());
+                          }
+                        },
+                        icon: const Icon(
+                          EvaIcons.trash2Outline,
+                          color: Colors.redAccent,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 8.0),
@@ -49,22 +115,28 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
                   ],
                 ),
                 const SizedBox(height: 20.0),
-                SizedBox(
-                  height: 50,
-                  width: 250,
-                  child: Card(
-                    elevation: 0,
-                    color: HexColor('D1E7DD'),
-                    child: Center(
-                        child: Text(
-                      'Budi Hartanto',
-                      style: TextStyle(
-                        color: HexColor('198754'),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    )),
-                  ),
-                )
+                Expanded(
+                    child: ListView.builder(
+                  itemCount: logs.length,
+                  itemBuilder: (context, index) {
+                    return SizedBox(
+                      child: Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0)),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 8.0),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Text(logs[index].aktivitas.toString()),
+                                Text((logs[index].tgl.toString()))
+                              ],
+                            ),
+                          )),
+                    );
+                  },
+                ))
               ],
             ),
           ),
@@ -120,7 +192,7 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
                                 Scaffold.of(context).openEndDrawer();
                               },
                               icon: Icon(
-                                Icons.person_rounded,
+                                Icons.notes_rounded,
                                 color: HexColor('204FA1'),
                               ));
                         }),

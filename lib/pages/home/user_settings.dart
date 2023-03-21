@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:myspp_app/components/session.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
 
 class UserSettings extends ConsumerStatefulWidget {
@@ -58,6 +59,7 @@ class _UserSettingsState extends ConsumerState<UserSettings> {
           onPressed: () async {
             try {
               await ref.read(authControllerProvider.notifier).signOut(context);
+              deleteSession();
             } on FirebaseAuthException {
               AnimatedSnackBar.rectangle(
                 'Logout Failed',

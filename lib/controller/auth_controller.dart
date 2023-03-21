@@ -1,6 +1,7 @@
-// ignore_for_file: use_build_context_synchronously
+import 'dart:developer';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +13,7 @@ import 'package:myspp_app/navigation/navbar.dart';
 import 'package:myspp_app/navigation/navbar_admin.dart';
 import 'package:myspp_app/pages/auth/forgot_pass/mail_check.dart';
 import 'package:myspp_app/pages/auth/login.dart';
+import 'package:myspp_app/pages/pengguna/data_pengguna.dart';
 import 'package:myspp_app/pages/splash/admin_splash.dart';
 import 'package:myspp_app/pages/splash/user_splash.dart';
 
@@ -33,7 +35,7 @@ class AuthController extends StateNotifier<Users> {
           .signInWithEmailAndPassword(email: email, password: password);
       if (credential.user != null) {
         var checkUsers = await FirebaseFirestore.instance
-            .collection('users')
+            .collection('pengguna')
             .doc(credential.user!.uid)
             .get();
         if (!checkUsers.exists) {
@@ -55,87 +57,57 @@ class AuthController extends StateNotifier<Users> {
     }
   }
 
-  Future<void> emailPassSignUp(
-      BuildContext context,
-      String email,
-      String password,
-      String nama,
-      String kelas,
-      String telp,
-      String nis,
-      String nisn,
-      String alamat) async {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => Center(
-              child: CircularProgressIndicator.adaptive(
-                backgroundColor: HexColor('#4392A4'),
-              ),
-            ));
+  Future<void> register(BuildContext context, String email, String password,
+      String nama, String telp, String alamat, String level) async {
+    FirebaseApp app = await Firebase.initializeApp(
+        name: 'Secondary', options: Firebase.app().options);
     try {
-      var credential = await FirebaseAuth.instance
+      var userCredential = await FirebaseAuth.instanceFor(app: app)
           .createUserWithEmailAndPassword(email: email, password: password);
-      // var checkUsers = await FirebaseFirestore.instance
-      //     .collection('users')
-      //     .doc(credential.user!.uid)
-      //     .get();
       await FirebaseFirestore.instance
-          .collection('users')
-          .doc(credential.user!.uid)
+          .collection('pengguna')
+          .doc(userCredential.user!.uid)
           .set({
-        'uid': credential.user!.uid,
+        'uid': userCredential.user!.uid,
         'email': email,
-        'role': 'siswa',
-        'nisn': nisn,
-        'nis': nis,
         'nama': nama,
-        'kelas': kelas,
+        'telp': telp,
         'alamat': alamat,
-        'telp': telp
+        'level': level,
       });
-      // final users = Users(
-      //     uid: credential.user!.uid,
-      //     email: email,
-      //     role: 'siswa',
-      //     nisn: nisn,
-      //     nis: nis,
-      //     nama: nama,
-      //     kelas: kelas,
-      //     alamat: alamat,
-      //     telp: telp);
-      // state = users;
-      if (!mounted) return;
-      AnimatedSnackBar.rectangle('Daftar Berhasil', 'Selamat datang di MySpp!',
-              type: AnimatedSnackBarType.success,
-              brightness: Brightness.light,
-              mobileSnackBarPosition: MobileSnackBarPosition.bottom,
-              duration: const Duration(milliseconds: 80))
-          .show(
-        context,
-      );
-      Navigator.of(context).popUntil((route) => route.isFirst);
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const AdminNavigation(),
-          ));
+      final auth = FirebaseAuth.instance;
+      final dbLog = FirebaseFirestore.instance.collection('log_history');
+      final doc = dbLog.doc();
+      await doc.set({
+        'log_id': doc.id,
+        'aktivitas': 'Membuat akun',
+        'email': auth.currentUser!.email,
+        'tgl': DateTime.now(),
+      });
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const DataPengguna()));
+      // ignore: use_build_context_synchronously
+      Snackbars()
+          .successSnackbars(context, 'Berhasil', 'Berhasil Menambah Akun');
     } on FirebaseAuthException catch (e) {
-      var error = e.message.toString();
-      AnimatedSnackBar.rectangle('Daftar Gagal', error,
-              type: AnimatedSnackBarType.error,
-              brightness: Brightness.light,
-              mobileSnackBarPosition: MobileSnackBarPosition.top,
-              duration: const Duration(milliseconds: 80))
-          .show(
-        context,
-      );
+      // Do something with exception. This try/catch is here to make sure
+      // that even if the user creation fails, app.delete() runs, if is not,
+      // next time Firebase.initializeApp() will fail as the previous one was
+      // not deleted.
+      log(e.message.toString());
     }
+
+    await app.delete();
+
+    return Future.sync(() => FirebaseAuth.instanceFor(app: app));
   }
 
   Future<void> getUsers({required String uid}) async {
     var checkUsers =
-        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+        await FirebaseFirestore.instance.collection('pengguna').doc(uid).get();
 
     final users = Users.fromJson(checkUsers.data()!);
     state = users;
@@ -146,7 +118,6 @@ class AuthController extends StateNotifier<Users> {
     Logger().i(result);
     if (result != null) {
       await getUsers(uid: result.uid);
-      // route(context);
       return result.uid;
     }
     return '';
@@ -156,12 +127,19 @@ class AuthController extends StateNotifier<Users> {
     User? user = FirebaseAuth.instance.currentUser;
     // ignore: unused_local_variable
     var kk = FirebaseFirestore.instance
-        .collection('users')
+        .collection('pengguna')
         .doc(user!.uid)
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
-        if (documentSnapshot.get('role') == "admin") {
+        if (documentSnapshot.get('level') == "Admin") {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AdminNavigation(),
+            ),
+          );
+        } else if (documentSnapshot.get('level') == "Petugas") {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -186,12 +164,12 @@ class AuthController extends StateNotifier<Users> {
     User? user = FirebaseAuth.instance.currentUser;
     // ignore: unused_local_variable
     var kk = FirebaseFirestore.instance
-        .collection('users')
+        .collection('pengguna')
         .doc(user!.uid)
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
-        if (documentSnapshot.get('role') == "admin") {
+        if (documentSnapshot.get('level') == "Admin") {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -199,6 +177,13 @@ class AuthController extends StateNotifier<Users> {
             ),
           );
           return true;
+        } else if (documentSnapshot.get('level') == "Petugas") {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AdminNavigation(),
+            ),
+          );
         } else {
           Navigator.pushReplacement(
             context,
@@ -213,7 +198,7 @@ class AuthController extends StateNotifier<Users> {
       }
       return false;
     });
-    return false;
+    return true;
   }
 
   Future<void> forgetPass(BuildContext context, String email) async {
@@ -228,6 +213,7 @@ class AuthController extends StateNotifier<Users> {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
 
+      // ignore: use_build_context_synchronously
       AnimatedSnackBar.rectangle('Email Sent', 'Check your email!',
               type: AnimatedSnackBarType.success,
               brightness: Brightness.light,
@@ -236,6 +222,7 @@ class AuthController extends StateNotifier<Users> {
           .show(
         context,
       );
+      // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const MailCheck()));
     } on FirebaseAuthException catch (e) {
@@ -263,6 +250,7 @@ class AuthController extends StateNotifier<Users> {
     if (!mounted) return;
 
     await FirebaseAuth.instance.signOut();
+    // ignore: use_build_context_synchronously
     Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (BuildContext context) {

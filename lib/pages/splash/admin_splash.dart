@@ -1,5 +1,6 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:myspp_app/components/session.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
 import 'package:myspp_app/navigation/navbar_admin.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +17,7 @@ class _AdminSplashState extends ConsumerState<AdminSplash> {
   void initState() {
     super.initState();
     checkLogin();
+    getSession();
   }
 
   Future<void> checkLogin() async {
@@ -26,11 +28,9 @@ class _AdminSplashState extends ConsumerState<AdminSplash> {
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
       splash: 'assets/img/logo.png',
-      nextScreen: Builder(
-        builder: (context) {
-          return const AdminNavigation();
-        }
-      ),
+      nextScreen: Builder(builder: (context) {
+        return const AdminNavigation();
+      }),
       splashTransition: SplashTransition.fadeTransition,
       splashIconSize: 200,
     );

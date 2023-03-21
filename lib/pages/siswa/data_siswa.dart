@@ -233,6 +233,7 @@ class _DataSiswaState extends ConsumerState<DataSiswa> {
                                               DeleteBottomSheet(
                                                   context: context,
                                                   siswa: siswas[index],
+                                                  result: index,
                                                   callback: () async {
                                                     try {
                                                       await ref
@@ -413,6 +414,7 @@ class _DataSiswaState extends ConsumerState<DataSiswa> {
   Future<dynamic> DeleteBottomSheet(
       {required BuildContext context,
       required VoidCallback callback,
+      required dynamic result,
       required Siswa siswa}) {
     return showMaterialModalBottomSheet(
         context: context,
@@ -427,13 +429,17 @@ class _DataSiswaState extends ConsumerState<DataSiswa> {
                 child: Column(
                   children: [
                     Text(
-                      siswa.nama.toString(),
+                      search.text.isNotEmpty
+                          ? siswaResult[result].nama.toString()
+                          : siswa.nama.toString(),
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 16.0),
                     ),
                     const SizedBox(height: 10.0),
                     Text(
-                      siswa.nis.toString(),
+                      search.text.isNotEmpty
+                          ? siswaResult[result].nis.toString()
+                          : siswa.nis.toString(),
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 16.0,

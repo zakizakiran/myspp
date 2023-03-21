@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -7,50 +6,70 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:myspp_app/components/get_role.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
+import 'package:myspp_app/controller/siswa_controller.dart';
+import 'package:myspp_app/model/siswa.dart';
 
-class Register extends ConsumerStatefulWidget {
-  const Register({super.key});
+class TambahPenggunaSiswa extends ConsumerStatefulWidget {
+  final Siswa? siswa;
+  const TambahPenggunaSiswa({super.key, required this.siswa});
 
   @override
-  ConsumerState<Register> createState() => _RegisterState();
+  ConsumerState<TambahPenggunaSiswa> createState() =>
+      _TambahPenggunaSiswaState();
 }
 
-class _RegisterState extends ConsumerState<Register> {
+class _TambahPenggunaSiswaState extends ConsumerState<TambahPenggunaSiswa> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  TextEditingController nis = TextEditingController();
-  TextEditingController nama = TextEditingController();
-  TextEditingController nisn = TextEditingController();
-  TextEditingController alamat = TextEditingController();
-  TextEditingController telp = TextEditingController();
+  late TextEditingController nama;
+  late TextEditingController alamat;
+  late TextEditingController telp;
 
   late List<DropdownMenuItem<String>> _dropDownMenuItems;
 
-  String? _currentclass;
-  String? tier;
+  String? _currentRole;
   bool passenable = true; //track password value
 
   @override
   void initState() {
+    _dropDownMenuItems = getDropdownMenuItem();
+    _currentRole = _dropDownMenuItems[0].value!;
+    getAllSiswa();
     super.initState();
+    nama = TextEditingController(text: widget.siswa!.nama.toString());
+    alamat = TextEditingController(text: widget.siswa!.alamat.toString());
+    telp = TextEditingController(text: widget.siswa!.telp.toString());
+  }
+
+  Future<void> getAllSiswa() async {
+    await ref.read(siswaControllerProvider.notifier).getSiswa();
   }
 
   @override
   void dispose() {
     email.dispose();
     nama.dispose();
-    nis.dispose();
-    nisn.dispose();
     telp.dispose();
     password.dispose();
     alamat.dispose();
     super.dispose();
   }
 
-  RegExp regexPass =
-      RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~_])$');
+  List roles = RoleName.roleName;
+
+  List<DropdownMenuItem<String>> getDropdownMenuItem() {
+    List<DropdownMenuItem<String>> items = [];
+    for (String item in roles) {
+      items.add(DropdownMenuItem(
+        value: item,
+        child: Text(item),
+      ));
+    }
+    return items;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +142,7 @@ class _RegisterState extends ConsumerState<Register> {
                                     child: Padding(
                                       padding: EdgeInsets.all(15.0),
                                       child: Text(
-                                        'Tambah Data Siswa',
+                                        'Mendaftar Pengguna Baru',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 16.0,
@@ -215,58 +234,6 @@ class _RegisterState extends ConsumerState<Register> {
                             TextFormField(
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
-                              controller: nisn,
-                              decoration: InputDecoration(
-                                prefixIcon: const Icon(
-                                  Icons.tag_rounded,
-                                  color: Colors.white,
-                                ),
-                                focusColor: Colors.white,
-                                focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    borderSide: BorderSide(
-                                        color: HexColor('204FA1'), width: 2)),
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    borderSide: const BorderSide(
-                                        color: Colors.white, width: 2)),
-                                labelText: 'NISN',
-                                labelStyle: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white),
-                              ),
-                              textInputAction: TextInputAction.next,
-                            ),
-                            const SizedBox(height: 20.0),
-                            TextFormField(
-                              style: const TextStyle(color: Colors.white),
-                              cursorColor: Colors.white,
-                              controller: nis,
-                              decoration: InputDecoration(
-                                prefixIcon: const Icon(
-                                  Icons.tag_rounded,
-                                  color: Colors.white,
-                                ),
-                                focusColor: Colors.white,
-                                focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    borderSide: BorderSide(
-                                        color: HexColor('204FA1'), width: 2)),
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    borderSide: const BorderSide(
-                                        color: Colors.white, width: 2)),
-                                labelText: 'NIS',
-                                labelStyle: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white),
-                              ),
-                              textInputAction: TextInputAction.next,
-                            ),
-                            const SizedBox(height: 20.0),
-                            TextFormField(
-                              style: const TextStyle(color: Colors.white),
-                              cursorColor: Colors.white,
                               controller: nama,
                               decoration: InputDecoration(
                                 prefixIcon: const Icon(
@@ -310,7 +277,7 @@ class _RegisterState extends ConsumerState<Register> {
                                 buttonPadding: const EdgeInsets.symmetric(
                                     horizontal: 14.0),
                                 items: _dropDownMenuItems,
-                                value: _currentclass,
+                                value: _currentRole,
                                 itemPadding:
                                     const EdgeInsets.only(left: 14, right: 14),
                                 dropdownMaxHeight: 150,
@@ -329,18 +296,8 @@ class _RegisterState extends ConsumerState<Register> {
                                 scrollbarRadius: const Radius.circular(40),
                                 onChanged: (newValue) {
                                   setState(() {
-                                    _currentclass = newValue;
-                                    if (newValue!.startsWith('I', 3)) {
-                                      tier = 'XIII';
-                                    } else if (newValue.startsWith('I', 2)) {
-                                      tier = 'XII';
-                                    } else if (newValue.startsWith('I', 1)) {
-                                      tier = 'XI';
-                                    } else {
-                                      tier = 'X';
-                                    }
+                                    _currentRole = newValue;
                                   });
-                                  // Logger().i(tier);
                                 },
                               ),
                             ),
@@ -421,16 +378,15 @@ class _RegisterState extends ConsumerState<Register> {
                           try {
                             await ref
                                 .read(authControllerProvider.notifier)
-                                .emailPassSignUp(
-                                    context,
-                                    email.text,
-                                    password.text,
-                                    nama.text,
-                                    _currentclass.toString(),
-                                    telp.text,
-                                    nis.text,
-                                    nisn.text,
-                                    alamat.text);
+                                .register(
+                                  context,
+                                  email.text,
+                                  password.text,
+                                  nama.text,
+                                  telp.text,
+                                  alamat.text,
+                                  _currentRole.toString(),
+                                );
                             setState(() {});
                           } on FirebaseAuthException catch (e) {
                             log(e.message.toString());
@@ -438,7 +394,7 @@ class _RegisterState extends ConsumerState<Register> {
                         }
                       },
                       child: const Text(
-                        'Tambah Data',
+                        'Tambah Pengguna',
                         style: TextStyle(
                           fontSize: 16.0,
                         ),

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -32,6 +33,16 @@ class SiswaController extends StateNotifier<List<Siswa>> {
         context, MaterialPageRoute(builder: (context) => const DataSiswa()));
     Siswa temp = siswa.copyWith(sid: doc.id);
     await doc.set(temp.toJson());
+
+    final auth = FirebaseAuth.instance;
+    final dbLog = FirebaseFirestore.instance.collection('log_history');
+    final docID = dbLog.doc();
+    await docID.set({
+      'log_id': docID.id,
+      'aktivitas': 'Menambah siswa',
+      'email': auth.currentUser!.email,
+      'tgl': DateTime.now(),
+    });
   }
 
   Future<void> updateSiswa(
@@ -48,6 +59,15 @@ class SiswaController extends StateNotifier<List<Siswa>> {
               ),
             ));
     await doc.update(temp.toJson());
+    final auth = FirebaseAuth.instance;
+    final dbLog = FirebaseFirestore.instance.collection('log_history');
+    final docID = dbLog.doc();
+    await docID.set({
+      'log_id': docID.id,
+      'aktivitas': 'Mengubah data siswa',
+      'email': auth.currentUser!.email,
+      'tgl': DateTime.now(),
+    });
     await getSiswa();
   }
 
@@ -62,6 +82,15 @@ class SiswaController extends StateNotifier<List<Siswa>> {
               ),
             ));
     await doc.delete();
+    final auth = FirebaseAuth.instance;
+    final dbLog = FirebaseFirestore.instance.collection('log_history');
+    final docID = dbLog.doc();
+    await docID.set({
+      'log_id': docID.id,
+      'aktivitas': 'Menghapus data siswa',
+      'email': auth.currentUser!.email,
+      'tgl': DateTime.now(),
+    });
     await getSiswa();
   }
 }

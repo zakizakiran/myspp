@@ -8,6 +8,7 @@ import 'package:myspp_app/components/skeleton_container.dart';
 import 'package:myspp_app/components/snackbars.dart';
 import 'package:myspp_app/controller/siswa_controller.dart';
 import 'package:myspp_app/model/siswa.dart';
+import 'package:myspp_app/pages/pengguna/tambah_pengguna_siswa.dart';
 import 'package:myspp_app/pages/siswa/data_siswa.dart';
 
 class DetailSiswa extends ConsumerStatefulWidget {
@@ -167,6 +168,7 @@ class _DetailSiswaState extends ConsumerState<DetailSiswa> {
                 child: isloading
                     ? buildSkeleton(context)
                     : Card(
+                        elevation: 2,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16.0)),
                         color: HexColor('204FA1'),
@@ -290,6 +292,38 @@ class _DetailSiswaState extends ConsumerState<DetailSiswa> {
                         ),
                       ),
               ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 20),
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.all(15.0),
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                              side: BorderSide(color: HexColor('204FA1')),
+                            )),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TambahPenggunaSiswa(
+                                  siswa: widget.siswa,
+                                ),
+                              ));
+                        },
+                        child: Text(
+                          'Buat Akun',
+                          style: TextStyle(
+                              color: HexColor('204FA1'),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0),
+                        )),
+                  ),
+                ],
+              )
             ],
           ),
         ],
