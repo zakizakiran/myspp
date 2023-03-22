@@ -44,23 +44,12 @@ class _OnboardState extends State<Onboard> {
                     stopPauseOnTap: true,
                   ),
                   const SizedBox(height: 8.0),
-                  Row(
-                    children: [
-                      Text(
-                        'My',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 36,
-                            color: HexColor('7286D3')),
-                      ),
-                      const Text(
-                        'Spp.',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 36,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    'MySpp',
+                    style: TextStyle(
+                        color: HexColor('3E3592'),
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10.0),
                   const Text(

@@ -23,7 +23,7 @@ class _SplashState extends ConsumerState<Splash> {
       splash: 'assets/img/logo.png',
       nextScreen: const Onboard(),
       splashTransition: SplashTransition.fadeTransition,
-      splashIconSize: 200,
+      splashIconSize: 250,
     );
   }
 }

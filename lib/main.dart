@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myspp_app/components/get_role.dart';
-import 'package:myspp_app/components/session.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
 import 'package:myspp_app/firebase_options.dart';
 import 'package:myspp_app/pages/splash/admin_splash.dart';
@@ -21,7 +20,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await RoleName().chooseRole();
-  await getSession();
   runApp(const ProviderScope(child: MySppApp()));
 }
 

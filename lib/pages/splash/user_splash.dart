@@ -2,7 +2,6 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:myspp_app/components/session.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
 import 'package:myspp_app/navigation/navbar.dart';
 
@@ -21,7 +20,6 @@ class UserSplashState extends ConsumerState<UserSplash> {
   void initState() {
     super.initState();
     checkLogin();
-    getSession();
   }
 
   Future<void> checkLogin() async {
@@ -31,12 +29,12 @@ class UserSplashState extends ConsumerState<UserSplash> {
   @override
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
-      splash: 'assets/img/logo.png',
+      splash: 'assets/img/logo2.png',
       nextScreen: Builder(builder: (context) {
         return const UserNavigation();
       }),
       splashTransition: SplashTransition.fadeTransition,
-      splashIconSize: 200,
+      splashIconSize: 250,
     );
   }
 }
