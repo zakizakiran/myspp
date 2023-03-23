@@ -42,7 +42,8 @@ class _DataPenggunaState extends ConsumerState<DataPengguna> {
           userResult.clear();
           var temp = usersData
               .where((element) =>
-                  element.nama!.toLowerCase().contains(value.toLowerCase()))
+                  element.nama!.toLowerCase().contains(value.toLowerCase()) ||
+                  element.email!.toLowerCase().contains(value.toLowerCase()))
               .toList();
           temp.map((e) => userResult.add(e)).toList();
         } else {
@@ -56,7 +57,12 @@ class _DataPenggunaState extends ConsumerState<DataPengguna> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        backgroundColor: HexColor('673ab7'),
         appBar: AppBar(
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.vertical(bottom: Radius.circular(18.0))),
           title: const Text('Data Pengguna',
               style: TextStyle(fontWeight: FontWeight.bold)),
           centerTitle: true,
@@ -83,16 +89,24 @@ class _DataPenggunaState extends ConsumerState<DataPengguna> {
             )
           ],
           elevation: 0,
-          backgroundColor: Colors.white,
           foregroundColor: Colors.black,
         ),
-        body: SafeArea(
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 18.0, vertical: 10.0),
-            child: Column(
-              children: [
-                TextField(
+        body: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+            colors: [
+              HexColor('673ab7'),
+              HexColor('00BCD4'),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          )),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(18.0, 50.0, 18.0, 0),
+                child: TextField(
+                    style: const TextStyle(color: Colors.white),
                     controller: search,
                     onChanged: (value) {
                       updateList(value);
@@ -108,139 +122,157 @@ class _DataPenggunaState extends ConsumerState<DataPengguna> {
                               },
                               icon: const Icon(
                                 Icons.clear,
+                                color: Colors.white,
                               ))
                           : null,
-                      hintText: 'cari nama siswa atau nis',
+                      hintText: 'cari nama siswa atau email',
+                      hintStyle: TextStyle(color: Colors.grey[400]),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20.0),
-                          borderSide: BorderSide(color: HexColor('204FA1'))),
+                          borderSide: const BorderSide(color: Colors.white)),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20.0),
-                          borderSide: BorderSide(color: HexColor('204FA1'))),
-                      prefixIcon: Icon(
+                          borderSide: const BorderSide(color: Colors.white)),
+                      prefixIcon: const Icon(
                         EvaIcons.search,
-                        color: HexColor('204FA1'),
+                        color: Colors.white,
                       ),
                     )),
-                const SizedBox(height: 20.0),
-                Expanded(
-                    child: usersData.toString().isEmpty
-                        ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                'assets/img/no_data.svg',
-                                width: 300,
+              ),
+              const SizedBox(height: 20.0),
+              Expanded(
+                  child: usersData.toString().isEmpty
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/img/no_data.svg',
+                              width: 300,
+                            ),
+                            const Text('Tidak ada data!'),
+                          ],
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.only(top: 50.0),
+                          child: Card(
+                            shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20.0),
+                                    topRight: Radius.circular(20.0))),
+                            margin: EdgeInsets.zero,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 10.0),
+                              child: ListView.builder(
+                                padding: const EdgeInsets.only(top: 30.0),
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: search.text.isNotEmpty
+                                    ? userResult.length
+                                    : usersData.length,
+                                itemBuilder: (ctx, index) {
+                                  return Padding(
+                                    padding:
+                                        const EdgeInsets.only(bottom: 12.0),
+                                    child: ShowUp(
+                                      delay: 150,
+                                      child: Card(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12.0)),
+                                          elevation: 0.5,
+                                          color: HexColor('204FA1'),
+                                          child: InkWell(
+                                            onLongPress: () {
+                                              // DeleteBottomSheet(
+                                              //   context: context,
+                                              //   result: index,
+                                              //   users: usersData[index],
+                                              //   callback: () async {
+                                              //     try {
+                                              //       ref
+                                              //           .read(
+                                              //               usersControllerProvider
+                                              //                   .notifier)
+                                              //           .deleteUser(
+                                              //               context: context,
+                                              //               email: usersData[index]
+                                              //                   .email
+                                              //                   .toString(),
+                                              //               password: )
+                                              //           .toString();
+                                              //       setState(() {});
+                                              //       if (!mounted) return;
+                                              //       Snackbars().successSnackbars(
+                                              //           context,
+                                              //           'Berhasil',
+                                              //           'Berhasil Menghapus Data');
+                                              //       Navigator.of(context)
+                                              //         ..pop(context)
+                                              //         ..pop(ctx);
+                                              //       Navigator.pushReplacement(
+                                              //           context,
+                                              //           MaterialPageRoute(
+                                              //               builder: (context) =>
+                                              //                   const DataPengguna()));
+                                              //     } on FirebaseException catch (e) {
+                                              //       Snackbars().failedSnackbars(
+                                              //           context,
+                                              //           'Gagal',
+                                              //           e.message.toString());
+                                              //     }
+                                              //   },
+                                              // );
+                                            },
+                                            child: ListTile(
+                                              title: Text(
+                                                search.text.isNotEmpty
+                                                    ? userResult[index]
+                                                        .nama
+                                                        .toString()
+                                                    : usersData[index]
+                                                        .nama
+                                                        .toString(),
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              subtitle: Text(
+                                                search.text.isNotEmpty
+                                                    ? userResult[index]
+                                                        .email
+                                                        .toString()
+                                                    : usersData[index]
+                                                        .email
+                                                        .toString(),
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              trailing: Text(
+                                                search.text.isNotEmpty
+                                                    ? userResult[index]
+                                                        .level
+                                                        .toString()
+                                                    : usersData[index]
+                                                        .level
+                                                        .toString(),
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          )),
+                                    ),
+                                  );
+                                },
                               ),
-                              const Text('Tidak ada data!'),
-                            ],
-                          )
-                        : ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: search.text.isNotEmpty
-                                ? userResult.length
-                                : usersData.length,
-                            itemBuilder: (ctx, index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 12.0),
-                                child: ShowUp(
-                                  delay: 150,
-                                  child: Card(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12.0)),
-                                      elevation: 0.5,
-                                      color: HexColor('204FA1'),
-                                      child: InkWell(
-                                        onLongPress: () {
-                                          // DeleteBottomSheet(
-                                          //   context: context,
-                                          //   result: index,
-                                          //   users: usersData[index],
-                                          //   callback: () async {
-                                          //     try {
-                                          //       ref
-                                          //           .read(
-                                          //               usersControllerProvider
-                                          //                   .notifier)
-                                          //           .deleteUser(
-                                          //               context: context,
-                                          //               email: usersData[index]
-                                          //                   .email
-                                          //                   .toString(),
-                                          //               password: )
-                                          //           .toString();
-                                          //       setState(() {});
-                                          //       if (!mounted) return;
-                                          //       Snackbars().successSnackbars(
-                                          //           context,
-                                          //           'Berhasil',
-                                          //           'Berhasil Menghapus Data');
-                                          //       Navigator.of(context)
-                                          //         ..pop(context)
-                                          //         ..pop(ctx);
-                                          //       Navigator.pushReplacement(
-                                          //           context,
-                                          //           MaterialPageRoute(
-                                          //               builder: (context) =>
-                                          //                   const DataPengguna()));
-                                          //     } on FirebaseException catch (e) {
-                                          //       Snackbars().failedSnackbars(
-                                          //           context,
-                                          //           'Gagal',
-                                          //           e.message.toString());
-                                          //     }
-                                          //   },
-                                          // );
-                                        },
-                                        child: ListTile(
-                                          title: Text(
-                                            search.text.isNotEmpty
-                                                ? userResult[index]
-                                                    .nama
-                                                    .toString()
-                                                : usersData[index]
-                                                    .nama
-                                                    .toString(),
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          subtitle: Text(
-                                            search.text.isNotEmpty
-                                                ? userResult[index]
-                                                    .email
-                                                    .toString()
-                                                : usersData[index]
-                                                    .email
-                                                    .toString(),
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          trailing: Text(
-                                            search.text.isNotEmpty
-                                                ? userResult[index]
-                                                    .level
-                                                    .toString()
-                                                : usersData[index]
-                                                    .level
-                                                    .toString(),
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      )),
-                                ),
-                              );
-                            },
-                          ))
-                // ElevatedButton(
-                //     onPressed: () {}, child: Text(userResult.toString()))
-              ],
-            ),
+                            ),
+                          ),
+                        ))
+              // ElevatedButton(
+              //     onPressed: () {}, child: Text(userResult.toString()))
+            ],
           ),
         ),
       ),
@@ -310,5 +342,4 @@ class _DataPenggunaState extends ConsumerState<DataPengguna> {
               ),
             ));
   }
-
 }

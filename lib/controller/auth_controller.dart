@@ -105,6 +105,57 @@ class AuthController extends StateNotifier<Users> {
     return Future.sync(() => FirebaseAuth.instanceFor(app: app));
   }
 
+  Future<void> registerSiswa(BuildContext context, String email,
+      String password, String nama, String telp, String alamat, String level,
+      {required String sid, required String nisn}) async {
+    FirebaseApp app = await Firebase.initializeApp(
+        name: 'Secondary', options: Firebase.app().options);
+    try {
+      var userCredential = await FirebaseAuth.instanceFor(app: app)
+          .createUserWithEmailAndPassword(email: email, password: password);
+      await FirebaseFirestore.instance
+          .collection('pengguna')
+          .doc(userCredential.user!.uid)
+          .set({
+        'uid': userCredential.user!.uid,
+        'email': email,
+        'nama': nama,
+        'telp': telp,
+        'alamat': alamat,
+        'level': level,
+        'sid': sid,
+        'nisn': nisn
+      });
+      final auth = FirebaseAuth.instance;
+      final dbLog = FirebaseFirestore.instance.collection('log_history');
+      final doc = dbLog.doc();
+      await doc.set({
+        'log_id': doc.id,
+        'aktivitas': 'Membuat akun',
+        'email': auth.currentUser!.email,
+        'tgl': DateTime.now(),
+      });
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const DataPengguna()));
+      // ignore: use_build_context_synchronously
+      Snackbars()
+          .successSnackbars(context, 'Berhasil', 'Berhasil Menambah Akun');
+    } on FirebaseAuthException catch (e) {
+      // Do something with exception. This try/catch is here to make sure
+      // that even if the user creation fails, app.delete() runs, if is not,
+      // next time Firebase.initializeApp() will fail as the previous one was
+      // not deleted.
+      log(e.message.toString());
+    }
+
+    await app.delete();
+
+    return Future.sync(() => FirebaseAuth.instanceFor(app: app));
+  }
+
   Future<void> getUsers({required String uid}) async {
     var checkUsers =
         await FirebaseFirestore.instance.collection('pengguna').doc(uid).get();

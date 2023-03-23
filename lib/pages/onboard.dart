@@ -83,7 +83,7 @@ class _OnboardState extends State<Onboard> {
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
-                        backgroundColor: HexColor('204FA1'),
+                        backgroundColor: HexColor('673ab7'),
                         padding: const EdgeInsets.all(15.0),
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(
@@ -100,43 +100,6 @@ class _OnboardState extends State<Onboard> {
                       ),
                     ),
                     const SizedBox(height: 15.0),
-                    // const Center(
-                    //     child: Text(
-                    //   '- ATAU -',
-                    //   style: TextStyle(
-                    //     fontWeight: FontWeight.bold,
-                    //   ),
-                    // )),
-                    // const SizedBox(height: 15.0),
-                    // OutlinedButton(
-                    //   onPressed: () {
-                    //     Navigator.push(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //             builder: (context) => const Register()));
-                    //   },
-                    //   style: OutlinedButton.styleFrom(
-                    //     elevation: 0,
-                    //     backgroundColor: HexColor('FFFFFF'),
-                    //     padding: const EdgeInsets.all(15.0),
-                    //     shape: const RoundedRectangleBorder(
-                    //       borderRadius: BorderRadius.all(
-                    //         Radius.circular(12.0),
-                    //       ),
-                    //     ),
-                    //     side: BorderSide(
-                    //       color: HexColor('204FA1'),
-                    //     ),
-                    //   ),
-                    //   child: Text(
-                    //     'Daftar',
-                    //     style: TextStyle(
-                    //       fontWeight: FontWeight.bold,
-                    //       fontSize: 16,
-                    //       color: HexColor('204FA1'),
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),

@@ -378,13 +378,15 @@ class _TambahPenggunaSiswaState extends ConsumerState<TambahPenggunaSiswa> {
                           try {
                             await ref
                                 .read(authControllerProvider.notifier)
-                                .register(
+                                .registerSiswa(
                                   context,
                                   email.text,
                                   password.text,
                                   nama.text,
                                   telp.text,
                                   alamat.text,
+                                  sid: widget.siswa!.sid.toString(),
+                                  nisn: widget.siswa!.nisn.toString(),
                                   _currentRole.toString(),
                                 );
                             setState(() {});

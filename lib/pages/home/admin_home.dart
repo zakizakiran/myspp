@@ -10,6 +10,7 @@ import 'package:myspp_app/components/animations/showup.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
 import 'package:myspp_app/controller/log_history_controller.dart';
 import 'package:myspp_app/model/log_history.dart';
+import 'package:myspp_app/pages/pembayaran/pembayaran_view.dart';
 import 'package:myspp_app/pages/pengguna/data_pengguna.dart';
 import 'package:myspp_app/pages/siswa/data_siswa.dart';
 
@@ -56,7 +57,7 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
                     children: [
                       SizedBox(width: MediaQuery.of(context).size.width * 0.12),
                       const Text(
-                        'Log Aktvitas',
+                        'Aktivitas',
                         style: TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.w600,
@@ -83,7 +84,7 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
                       decoration: BoxDecoration(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(5)),
-                          color: HexColor("FAB464")),
+                          color: HexColor("673ab7")),
                       width: 50,
                       height: 5,
                     ),
@@ -92,6 +93,7 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
                 const SizedBox(height: 20.0),
                 Expanded(
                     child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
                   itemCount: logs.length,
                   itemBuilder: (context, index) {
                     return SizedBox(
@@ -124,8 +126,8 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
         decoration: BoxDecoration(
             gradient: LinearGradient(
           colors: [
-            HexColor('673ab7').withOpacity(0.8),
-            HexColor('00BCD4').withOpacity(0.7),
+            HexColor('673ab7'),
+            HexColor('00BCD4'),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -262,8 +264,13 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
                                         builder: (context) =>
                                             const DataPengguna()));
                               }, 'assets/img/penggunaWidget.svg'),
-                              menuWidget(
-                                  () {}, 'assets/img/pembayaranWidget.svg'),
+                              menuWidget(() {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const PembayaranWidget()));
+                              }, 'assets/img/pembayaranWidget.svg'),
                             ],
                           ),
                         ),
