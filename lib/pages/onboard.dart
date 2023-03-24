@@ -83,7 +83,7 @@ class _OnboardState extends State<Onboard> {
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
-                        backgroundColor: HexColor('673ab7'),
+                        backgroundColor: HexColor('204FA1'),
                         padding: const EdgeInsets.all(15.0),
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(

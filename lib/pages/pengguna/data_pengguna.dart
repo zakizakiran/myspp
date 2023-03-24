@@ -141,17 +141,34 @@ class _DataPenggunaState extends ConsumerState<DataPengguna> {
               ),
               const SizedBox(height: 20.0),
               Expanded(
-                  child: usersData.toString().isEmpty
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              'assets/img/no_data.svg',
-                              width: 300,
-                            ),
-                            const Text('Tidak ada data!'),
-                          ],
-                        )
+                  child: usersData.isEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 50.0),
+                          child: Card(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20.0))),
+                              margin: EdgeInsets.zero,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0, vertical: 10.0),
+                                child: ListView(
+                                  physics: const BouncingScrollPhysics(),
+                                  children: [
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/img/no_data.svg',
+                                          width: 350,
+                                        ),
+                                        const Text('Tidak ada data!'),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )))
                       : Padding(
                           padding: const EdgeInsets.only(top: 50.0),
                           child: Card(

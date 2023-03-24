@@ -184,16 +184,33 @@ class _DataSiswaState extends ConsumerState<DataSiswa> {
                   const SizedBox(height: 20.0),
                   Expanded(
                       child: siswas.isEmpty
-                          ? Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/img/no_data.svg',
-                                  width: 300,
-                                ),
-                                const Text('Tidak ada data!'),
-                              ],
-                            )
+                          ? Padding(
+                              padding: const EdgeInsets.only(top: 50.0),
+                              child: Card(
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(20.0))),
+                                  margin: EdgeInsets.zero,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20.0, vertical: 10.0),
+                                    child: ListView(
+                                      physics: const BouncingScrollPhysics(),
+                                      children: [
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/img/no_data.svg',
+                                              width: 350,
+                                            ),
+                                            const Text('Tidak ada data!'),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  )))
                           : Padding(
                               padding: const EdgeInsets.only(top: 50.0),
                               child: Card(
@@ -358,8 +375,6 @@ class _DataSiswaState extends ConsumerState<DataSiswa> {
                                 ),
                               ),
                             ))
-                  // ElevatedButton(
-                  //     onPressed: () {}, child: Text(siswaResult.toString()))
                 ],
               )),
         ),
@@ -417,7 +432,7 @@ class _DataSiswaState extends ConsumerState<DataSiswa> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0)),
                             padding: const EdgeInsets.all(16.0),
-                            backgroundColor: HexColor('8D72E1')),
+                            backgroundColor: HexColor('204FA1')),
                         onPressed: editButton,
                         label: const Text(
                           'Ubah Data Siswa',
@@ -431,10 +446,10 @@ class _DataSiswaState extends ConsumerState<DataSiswa> {
                             elevation: 0,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0)),
-                            side: BorderSide(color: HexColor('8D72E1')),
+                            side: BorderSide(color: HexColor('204FA1')),
                             padding: const EdgeInsets.all(16.0),
                             backgroundColor: Colors.white,
-                            foregroundColor: HexColor('8D72E1')),
+                            foregroundColor: HexColor('204FA1')),
                         onPressed: detailButton,
                         label: const Text(
                           'Lihat Detail Siswa',
