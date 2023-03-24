@@ -28,16 +28,9 @@ class _DataSiswaState extends ConsumerState<DataSiswa> {
   bool isloading = true;
 
   @override
-  void initState() {
-    super.initState();
-    getAllSiswa();
-  }
-
-  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     loadData();
-    getAllSiswa();
   }
 
   List<Siswa> siswaResult = [];
@@ -49,6 +42,7 @@ class _DataSiswaState extends ConsumerState<DataSiswa> {
   Future loadData() async {
     setState(() {
       isloading = true;
+      getAllSiswa();
     });
 
     await Future.delayed(

@@ -6,6 +6,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:logger/logger.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:myspp_app/components/animations/showup.dart';
+import 'package:myspp_app/components/skeleton_container.dart';
 import 'package:myspp_app/controller/users_controller.dart';
 import 'package:myspp_app/model/users.dart';
 import 'package:myspp_app/pages/pengguna/tambah_pengguna.dart';
@@ -20,16 +21,36 @@ class DataPengguna extends ConsumerStatefulWidget {
 class _DataPenggunaState extends ConsumerState<DataPengguna> {
   TextEditingController search = TextEditingController();
 
+  bool isloading = true;
+
   @override
   void initState() {
     super.initState();
-    getAllData();
+    loadData();
   }
 
   List<Users> userResult = [];
 
   Future<void> getAllData() async {
     await ref.read(usersControllerProvider.notifier).getUsers();
+  }
+
+  Future loadData() async {
+    setState(() {
+      isloading = true;
+      getAllData();
+    });
+
+    await Future.delayed(
+      const Duration(seconds: 1),
+      () {
+        if (mounted) {
+          setState(() {
+            isloading = false;
+          });
+        }
+      },
+    );
   }
 
   @override
@@ -192,94 +213,98 @@ class _DataPenggunaState extends ConsumerState<DataPengguna> {
                                         const EdgeInsets.only(bottom: 12.0),
                                     child: ShowUp(
                                       delay: 150,
-                                      child: Card(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12.0)),
-                                          elevation: 0.5,
-                                          color: HexColor('204FA1'),
-                                          child: InkWell(
-                                            onLongPress: () {
-                                              // DeleteBottomSheet(
-                                              //   context: context,
-                                              //   result: index,
-                                              //   users: usersData[index],
-                                              //   callback: () async {
-                                              //     try {
-                                              //       ref
-                                              //           .read(
-                                              //               usersControllerProvider
-                                              //                   .notifier)
-                                              //           .deleteUser(
-                                              //               context: context,
-                                              //               email: usersData[index]
-                                              //                   .email
-                                              //                   .toString(),
-                                              //               password: )
-                                              //           .toString();
-                                              //       setState(() {});
-                                              //       if (!mounted) return;
-                                              //       Snackbars().successSnackbars(
-                                              //           context,
-                                              //           'Berhasil',
-                                              //           'Berhasil Menghapus Data');
-                                              //       Navigator.of(context)
-                                              //         ..pop(context)
-                                              //         ..pop(ctx);
-                                              //       Navigator.pushReplacement(
-                                              //           context,
-                                              //           MaterialPageRoute(
-                                              //               builder: (context) =>
-                                              //                   const DataPengguna()));
-                                              //     } on FirebaseException catch (e) {
-                                              //       Snackbars().failedSnackbars(
-                                              //           context,
-                                              //           'Gagal',
-                                              //           e.message.toString());
-                                              //     }
-                                              //   },
-                                              // );
-                                            },
-                                            child: ListTile(
-                                              title: Text(
-                                                search.text.isNotEmpty
-                                                    ? userResult[index]
-                                                        .nama
-                                                        .toString()
-                                                    : usersData[index]
-                                                        .nama
-                                                        .toString(),
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
+                                      child: isloading
+                                          ? buildSkeleton(context)
+                                          : Card(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          12.0)),
+                                              elevation: 0.5,
+                                              color: HexColor('204FA1'),
+                                              child: InkWell(
+                                                onLongPress: () {
+                                                  // DeleteBottomSheet(
+                                                  //   context: context,
+                                                  //   result: index,
+                                                  //   users: usersData[index],
+                                                  //   callback: () async {
+                                                  //     try {
+                                                  //       ref
+                                                  //           .read(
+                                                  //               usersControllerProvider
+                                                  //                   .notifier)
+                                                  //           .deleteUser(
+                                                  //               context: context,
+                                                  //               email: usersData[index]
+                                                  //                   .email
+                                                  //                   .toString(),
+                                                  //               password: )
+                                                  //           .toString();
+                                                  //       setState(() {});
+                                                  //       if (!mounted) return;
+                                                  //       Snackbars().successSnackbars(
+                                                  //           context,
+                                                  //           'Berhasil',
+                                                  //           'Berhasil Menghapus Data');
+                                                  //       Navigator.of(context)
+                                                  //         ..pop(context)
+                                                  //         ..pop(ctx);
+                                                  //       Navigator.pushReplacement(
+                                                  //           context,
+                                                  //           MaterialPageRoute(
+                                                  //               builder: (context) =>
+                                                  //                   const DataPengguna()));
+                                                  //     } on FirebaseException catch (e) {
+                                                  //       Snackbars().failedSnackbars(
+                                                  //           context,
+                                                  //           'Gagal',
+                                                  //           e.message.toString());
+                                                  //     }
+                                                  //   },
+                                                  // );
+                                                },
+                                                child: ListTile(
+                                                  title: Text(
+                                                    search.text.isNotEmpty
+                                                        ? userResult[index]
+                                                            .nama
+                                                            .toString()
+                                                        : usersData[index]
+                                                            .nama
+                                                            .toString(),
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  subtitle: Text(
+                                                    search.text.isNotEmpty
+                                                        ? userResult[index]
+                                                            .email
+                                                            .toString()
+                                                        : usersData[index]
+                                                            .email
+                                                            .toString(),
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                  trailing: Text(
+                                                    search.text.isNotEmpty
+                                                        ? userResult[index]
+                                                            .level
+                                                            .toString()
+                                                        : usersData[index]
+                                                            .level
+                                                            .toString(),
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                              subtitle: Text(
-                                                search.text.isNotEmpty
-                                                    ? userResult[index]
-                                                        .email
-                                                        .toString()
-                                                    : usersData[index]
-                                                        .email
-                                                        .toString(),
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                              trailing: Text(
-                                                search.text.isNotEmpty
-                                                    ? userResult[index]
-                                                        .level
-                                                        .toString()
-                                                    : usersData[index]
-                                                        .level
-                                                        .toString(),
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          )),
+                                              )),
                                     ),
                                   );
                                 },
@@ -359,4 +384,15 @@ class _DataPenggunaState extends ConsumerState<DataPengguna> {
               ),
             ));
   }
+
+  Widget buildSkeleton(BuildContext context) => Padding(
+        padding: const EdgeInsets.only(bottom: 12.0),
+        child: InkWell(
+          splashColor: Colors.grey[800],
+          child: SkeletonContainer.square(
+            width: MediaQuery.of(context).size.width * 1,
+            height: 70,
+          ),
+        ),
+      );
 }
