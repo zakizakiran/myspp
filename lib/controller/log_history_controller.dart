@@ -12,6 +12,7 @@ class LogHistoryController extends StateNotifier<List<LogHistory>> {
 
   Future<void> getLog({required String email}) async {
     var checkLog = await db
+        .orderBy('tgl', descending: true)
         .where('email', isEqualTo: FirebaseAuth.instance.currentUser!.email)
         .get();
 

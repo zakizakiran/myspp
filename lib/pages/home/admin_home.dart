@@ -103,14 +103,24 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
                           margin: const EdgeInsets.symmetric(
                               horizontal: 16.0, vertical: 8.0),
                           child: Padding(
-                            padding: const EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.all(16.0),
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(logs[index].aktivitas.toString()),
                                 const SizedBox(height: 3.0),
-                                Text(DateFormat.yMMMMEEEEd('id').format(
-                                    DateTime.tryParse(
-                                        logs[index].tgl.toString())!))
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(DateFormat.yMMMMEEEEd('id').format(
+                                        DateTime.tryParse(
+                                            logs[index].tgl.toString())!)),
+                                    Text(DateFormat.Hm('id').format(
+                                        DateTime.tryParse(
+                                            logs[index].tgl.toString())!))
+                                  ],
+                                ),
                               ],
                             ),
                           )),
