@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:intl/intl.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
+import 'package:myspp_app/controller/pembayaran_controller.dart';
+import 'package:myspp_app/model/pembayaran.dart';
 
 class UserHome extends ConsumerStatefulWidget {
   const UserHome({super.key});
@@ -13,8 +16,22 @@ class UserHome extends ConsumerStatefulWidget {
 
 class _UserHomeState extends ConsumerState<UserHome> {
   @override
+  void initState() {
+    super.initState();
+    getPembayaranUser();
+  }
+
+  List<Pembayaran> pembayaranResult = [];
+
+  Future<void> getPembayaranUser() async {
+    await ref.read(pembayaranControllerProvider.notifier).getPembayaranUser();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final user = ref.watch(authControllerProvider);
+    final pembayaran = ref.watch(pembayaranControllerProvider);
+
     String nama = user.nama.toString();
 
     return Scaffold(
@@ -171,18 +188,65 @@ class _UserHomeState extends ConsumerState<UserHome> {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20.0, 35.0, 20.0, 0.0),
-                child: GridView.count(
-                  physics: const NeverScrollableScrollPhysics(),
-                  childAspectRatio: 10 / 8,
-                  mainAxisSpacing: 12.0,
-                  crossAxisSpacing: 12.0,
-                  crossAxisCount: 3,
-                  children: [
-                    menuWidget(() {}, 'assets/img/pembayaranWidget.svg'),
-                  ],
-                ),
-              ),
+                  padding: const EdgeInsets.fromLTRB(20.0, 35.0, 20.0, 0.0),
+                  child: ListView.builder(
+                    itemCount: pembayaran.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 18.0, vertical: 12.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(pembayaran[index]
+                                          .bulanBayar
+                                          .toString()),
+                                      const SizedBox(width: 5.0),
+                                      Text(pembayaran[index]
+                                          .tahunBayar
+                                          .toString()),
+                                    ],
+                                  ),
+                                  Text(NumberFormat.simpleCurrency(
+                                          locale: 'id-ID', name: 'Rp ')
+                                      .format(pembayaran[index].jmlBayar))
+                                ],
+                              ),
+                              pembayaran[index].jmlBayar! >= 200000
+                                  ? Card(
+                                      color: Colors.greenAccent[100],
+                                      margin: EdgeInsets.zero,
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 3.0, horizontal: 10.0),
+                                        child: Text(
+                                          'Lunas',
+                                          style: TextStyle(color: Colors.green),
+                                        ),
+                                      ))
+                                  : Card(
+                                      color: Colors.grey[200],
+                                      margin: EdgeInsets.zero,
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 3.0, horizontal: 8.0),
+                                        child: Text(
+                                          'Belum Lunas',
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                      )),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  )),
             ),
           )
         ],
