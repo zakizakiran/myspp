@@ -43,6 +43,8 @@ class PembayaranController extends StateNotifier<List<Pembayaran>> {
             ));
     Pembayaran temp = pembayaran.copyWith(
       pid: doc.id,
+      jmlBayar: 0,
+      tglDibuat: DateTime.now(),
       tglTransaksi: DateTime.now(),
     );
     await doc.set(temp.toJson());

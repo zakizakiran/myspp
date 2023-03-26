@@ -1,4 +1,4 @@
-import 'package:aligned_dialog/aligned_dialog.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -86,19 +86,6 @@ class _DataPembayaranState extends ConsumerState<DataPembayaran> {
                               builder: (context) => LunasPembayaran(
                                     pembayaran: pembayaran[index],
                                   )));
-                    },
-                    cetakButton: () async {
-                      try {
-                        final data = await service.createinvoice(
-                            pembayaran: pembayaran[index]);
-                        if (!mounted) return;
-                        service.savePdfFile(
-                            context,
-                            "Pembayaran ${pembayaran[index].namaSiswa} ${DateFormat.yMMMMEEEEd('id').format(DateTime.now())}.pdf",
-                            data);
-                      } catch (e) {
-                        Logger().i(e.toString());
-                      }
                     });
               },
               child: Card(
@@ -154,7 +141,8 @@ class _DataPembayaranState extends ConsumerState<DataPembayaran> {
                               ),
                             ],
                           ),
-                          pembayaran[index].jmlBayar! >= 200000
+                          pembayaran[index].jmlBayar! >=
+                                  pembayaran[index].jmlTagihan!.toInt()
                               ? Card(
                                   color: Colors.greenAccent[100],
                                   margin: EdgeInsets.zero,
@@ -216,7 +204,6 @@ class _DataPembayaranState extends ConsumerState<DataPembayaran> {
       {required BuildContext context,
       required Pembayaran pembayaran,
       required dynamic lunasButton,
-      required dynamic cetakButton,
       required dynamic result}) {
     return showMaterialModalBottomSheet(
         context: context,
@@ -224,270 +211,251 @@ class _DataPembayaranState extends ConsumerState<DataPembayaran> {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
         // ignore: sized_box_for_whitespace
         builder: (context) => Container(
-              height: MediaQuery.of(context).size.height - 80,
+              height: MediaQuery.of(context).size.height - 50,
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: ListView(
+                  physics: const BouncingScrollPhysics(),
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Detail Pembayaran',
-                          style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                              color: HexColor('204FA1')),
-                        ),
-                        Builder(builder: (context) {
-                          return IconButton(
-                            onPressed: () {
-                              showAlignedDialog(
-                                  context: context,
-                                  builder: _localDialogBuilder,
-                                  followerAnchor: Alignment.topRight,
-                                  targetAnchor: Alignment.bottomRight,
-                                  barrierColor: Colors.transparent);
-                            },
-                            icon: const Icon(Icons.info_outline_rounded),
-                          );
-                        }),
-                      ],
-                    ),
-                    const SizedBox(height: 30.0),
-                    const Text(
-                      'Nama Siswa',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                    const SizedBox(height: 8.0),
-                    Text(
-                      pembayaran.namaSiswa.toString(),
-                      style: const TextStyle(fontSize: 16.0),
-                    ),
-                    const SizedBox(height: 10.0),
-                    const Text(
-                      'NISN',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                    const SizedBox(height: 8.0),
-                    Text(
-                      pembayaran.nisn.toString(),
-                      style: const TextStyle(fontSize: 16.0),
-                    ),
-                    const SizedBox(height: 10.0),
-                    const Text(
-                      'Bulan Bayar',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                    const SizedBox(height: 8.0),
-                    Row(
-                      children: [
-                        Text(
-                          pembayaran.bulanBayar.toString(),
-                          style: const TextStyle(fontSize: 16.0),
-                        ),
-                        const SizedBox(width: 5.0),
-                        Text(
-                          pembayaran.tahunBayar.toString(),
-                          style: const TextStyle(fontSize: 16.0),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10.0),
-                    const Text(
-                      'Total Bayar',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                    const SizedBox(height: 8.0),
-                    Text(
-                      NumberFormat.simpleCurrency(locale: 'id-ID', name: 'Rp. ')
-                          .format(pembayaran.jmlBayar),
-                      style: const TextStyle(fontSize: 16.0),
-                    ),
-                    const SizedBox(height: 10.0),
-                    const Text(
-                      'Petugas',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                    const SizedBox(height: 8.0),
-                    Text(
-                      pembayaran.namaPetugas.toString(),
-                      style: const TextStyle(fontSize: 16.0),
-                    ),
-                    const SizedBox(height: 10.0),
-                    const Text(
-                      'Tanggal Transaksi',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                    const SizedBox(height: 8.0),
-                    Text(
-                        DateFormat.yMMMMEEEEd('id').format(DateTime.tryParse(
-                            pembayaran.tglTransaksi.toString())!),
-                        style: const TextStyle(fontSize: 16.0)),
-                    const SizedBox(height: 10.0),
-                    const Text(
-                      'Status',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                    const SizedBox(height: 8.0),
-                    pembayaran.jmlBayar! >= 200000
-                        ? Card(
-                            color: Colors.greenAccent[100],
-                            margin: EdgeInsets.zero,
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10.0, horizontal: 16.0),
-                              child: Text(
-                                'Lunas',
-                                style: TextStyle(
-                                    color: Colors.green, fontSize: 16.0),
-                              ),
-                            ))
-                        : Card(
-                            color: Colors.grey[200],
-                            margin: EdgeInsets.zero,
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10.0, horizontal: 16.0),
-                              child: Text(
-                                'Belum Lunas',
-                                style: TextStyle(
-                                    color: Colors.grey, fontSize: 16.0),
-                              ),
-                            )),
-                    const SizedBox(height: 30.0),
-                    pembayaran.jmlBayar! >= 200000
-                        // ? const SizedBox()
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(16.0)),
-                                    backgroundColor: HexColor('204FA1'),
-                                    padding: const EdgeInsets.all(16.0),
-                                  ),
-                                  onPressed: null,
-                                  child: const Text(
-                                    'Sudah Lunas',
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )),
-                            ],
-                          )
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(16.0)),
-                                    backgroundColor: HexColor('204FA1'),
-                                    padding: const EdgeInsets.all(16.0),
-                                  ),
-                                  onPressed: lunasButton,
-                                  child: const Text(
-                                    'Lunasi',
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )),
-                            ],
-                          ),
-                    const SizedBox(height: 16.0),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16.0)),
-                              side: BorderSide(color: HexColor('204FA1')),
-                              backgroundColor: Colors.white,
-                              foregroundColor: HexColor('204FA1'),
-                              padding: const EdgeInsets.all(16.0),
-                            ),
-                            onPressed: cetakButton,
-                            child: const Text(
-                              'Cetak Pembayaran',
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Detail Pembayaran',
                               style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: HexColor('204FA1')),
+                            ),
+                            Builder(builder: (context) {
+                              return IconButton(
+                                onPressed: () async {
+                                  try {
+                                    final data = await service.createinvoice(
+                                        pembayaran: pembayaran);
+                                    if (!mounted) return;
+                                    service.savePdfFile(
+                                        context,
+                                        "Pembayaran ${pembayaran.namaSiswa} ${DateFormat.yMMMMEEEEd('id').format(DateTime.now())}.pdf",
+                                        data);
+                                  } catch (e) {
+                                    Logger().i(e.toString());
+                                  }
+                                },
+                                icon: const Icon(EvaIcons.fileText),
+                              );
+                            }),
+                          ],
+                        ),
+                        const SizedBox(height: 30.0),
+                        const Text(
+                          'Nama Siswa',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        const SizedBox(height: 8.0),
+                        Text(
+                          pembayaran.namaSiswa.toString(),
+                          style: const TextStyle(fontSize: 16.0),
+                        ),
+                        const SizedBox(height: 10.0),
+                        const Text(
+                          'NISN',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        const SizedBox(height: 8.0),
+                        Text(
+                          pembayaran.nisn.toString(),
+                          style: const TextStyle(fontSize: 16.0),
+                        ),
+                        const SizedBox(height: 10.0),
+                        const Text(
+                          'Bulan Bayar',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        const SizedBox(height: 8.0),
+                        Row(
+                          children: [
+                            Text(
+                              pembayaran.bulanBayar.toString(),
+                              style: const TextStyle(fontSize: 16.0),
+                            ),
+                            const SizedBox(width: 5.0),
+                            Text(
+                              pembayaran.tahunBayar.toString(),
+                              style: const TextStyle(fontSize: 16.0),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10.0),
+                        const Text(
+                          'Jumlah Bayar',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        const SizedBox(height: 8.0),
+                        Text(
+                          NumberFormat.simpleCurrency(
+                                  locale: 'id-ID', name: 'Rp. ')
+                              .format(pembayaran.jmlBayar),
+                          style: const TextStyle(fontSize: 16.0),
+                        ),
+                        const SizedBox(height: 10.0),
+                        const Text(
+                          'Petugas',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        const SizedBox(height: 8.0),
+                        Text(
+                          pembayaran.namaPetugas.toString(),
+                          style: const TextStyle(fontSize: 16.0),
+                        ),
+                        const SizedBox(height: 10.0),
+                        const Text(
+                          'Tanggal Dibuat',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        const SizedBox(height: 8.0),
+                        Text(
+                            DateFormat.yMMMMEEEEd('id').format(
+                                DateTime.tryParse(
+                                    pembayaran.tglDibuat.toString())!),
+                            style: const TextStyle(fontSize: 16.0)),
+                        const SizedBox(height: 10.0),
+                        const Text(
+                          'Tanggal Transaksi',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        const SizedBox(height: 8.0),
+                        Text(
+                            DateFormat.yMMMMEEEEd('id').format(
+                                DateTime.tryParse(
+                                    pembayaran.tglTransaksi.toString())!),
+                            style: const TextStyle(fontSize: 16.0)),
+                        const SizedBox(height: 10.0),
+                        const Text(
+                          'Total Tagihan',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        const SizedBox(height: 8.0),
+                        Text(
+                          NumberFormat.simpleCurrency(
+                                  locale: 'id-ID', name: 'Rp. ')
+                              .format(pembayaran.jmlTagihan),
+                          style: const TextStyle(fontSize: 16.0),
+                        ),
+                        const SizedBox(height: 10.0),
+                        const Text(
+                          'Status',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                        const SizedBox(height: 8.0),
+                        pembayaran.jmlBayar! >= pembayaran.jmlTagihan!.toInt()
+                            ? Card(
+                                color: Colors.greenAccent[100],
+                                margin: EdgeInsets.zero,
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 16.0),
+                                  child: Text(
+                                    'Lunas',
+                                    style: TextStyle(
+                                        color: Colors.green, fontSize: 16.0),
+                                  ),
+                                ))
+                            : Card(
+                                color: Colors.grey[200],
+                                margin: EdgeInsets.zero,
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 16.0),
+                                  child: Text(
+                                    'Belum Lunas',
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 16.0),
+                                  ),
+                                )),
+                        const SizedBox(height: 30.0),
+                        pembayaran.jmlBayar! >= pembayaran.jmlTagihan!.toInt()
+                            // ? const SizedBox()
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(16.0)),
+                                        backgroundColor: HexColor('204FA1'),
+                                        padding: const EdgeInsets.all(16.0),
+                                      ),
+                                      onPressed: null,
+                                      child: const Text(
+                                        'Sudah Lunas',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )),
+                                ],
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        elevation: 0,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(16.0)),
+                                        backgroundColor: HexColor('204FA1'),
+                                        padding: const EdgeInsets.all(16.0),
+                                      ),
+                                      onPressed: lunasButton,
+                                      child: const Text(
+                                        'Bayar',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )),
+                                ],
                               ),
-                            )),
+                        const SizedBox(height: 16.0),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
             ));
-  }
-
-  WidgetBuilder get _localDialogBuilder {
-    return (BuildContext context) {
-      return GestureDetector(
-        onTap: () {
-          Navigator.of(context).pop();
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-              border: Border.all(color: HexColor('EAEBE7'))),
-          child: DefaultTextStyle(
-            style: const TextStyle(fontSize: 18, color: Colors.black87),
-            child: IntrinsicWidth(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10.0),
-                    width: 150,
-                    child: const Text(
-                        'Berikut adalah detail dari pembayaran yang sudah dilakukan',
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          fontFamily: 'Quicksand',
-                        )),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    };
   }
 }

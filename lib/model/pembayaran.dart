@@ -5,9 +5,11 @@ class Pembayaran {
   String? emailSiswa;
   String? namaPetugas;
   DateTime? tglTransaksi;
+  DateTime? tglDibuat;
   String? bulanBayar;
   int? tahunBayar;
   int? jmlBayar;
+  int? jmlTagihan;
 
   Pembayaran(
       {this.pid,
@@ -16,9 +18,11 @@ class Pembayaran {
       this.emailSiswa,
       this.namaPetugas,
       this.tglTransaksi,
+      this.tglDibuat,
       this.bulanBayar,
       this.tahunBayar,
-      this.jmlBayar});
+      this.jmlBayar,
+      this.jmlTagihan});
 
   factory Pembayaran.fromJson(Map<String, dynamic> json) {
     return Pembayaran(
@@ -29,9 +33,11 @@ class Pembayaran {
         namaPetugas: json['nama_petugas'],
         tglTransaksi:
             DateTime.tryParse(json['tgl_transaksi'].toDate().toString()),
+        tglDibuat: DateTime.tryParse(json['tgl_dibuat'].toDate().toString()),
         bulanBayar: json['bln_bayar'],
         tahunBayar: json['thn_bayar'],
-        jmlBayar: json['jml_bayar']);
+        jmlBayar: json['jml_bayar'],
+        jmlTagihan: json['jml_tagihan']);
   }
 
   Map<String, dynamic> toJson() {
@@ -42,9 +48,11 @@ class Pembayaran {
       'email_siswa': emailSiswa,
       'nama_petugas': namaPetugas,
       'tgl_transaksi': tglTransaksi,
+      'tgl_dibuat': tglDibuat,
       'bln_bayar': bulanBayar,
       'thn_bayar': tahunBayar,
       'jml_bayar': jmlBayar,
+      'jml_tagihan': jmlTagihan,
     };
   }
 
@@ -55,9 +63,11 @@ class Pembayaran {
     String? emailSiswa,
     String? namaPetugas,
     DateTime? tglTransaksi,
+    DateTime? tglDibuat,
     String? bulanBayar,
     int? tahunBayar,
     int? jmlBayar,
+    int? jmlTagihan,
   }) {
     return Pembayaran(
         pid: pid ?? this.pid,
@@ -66,8 +76,10 @@ class Pembayaran {
         emailSiswa: emailSiswa ?? this.emailSiswa,
         namaPetugas: namaPetugas ?? this.namaPetugas,
         tglTransaksi: tglTransaksi ?? this.tglTransaksi,
+        tglDibuat: tglDibuat ?? this.tglDibuat,
         bulanBayar: bulanBayar ?? this.bulanBayar,
         tahunBayar: tahunBayar ?? this.tahunBayar,
-        jmlBayar: jmlBayar ?? this.jmlBayar);
+        jmlBayar: jmlBayar ?? this.jmlBayar,
+        jmlTagihan: jmlTagihan ?? this.jmlTagihan);
   }
 }

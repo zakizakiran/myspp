@@ -27,7 +27,7 @@ class PembayaranWidget extends ConsumerStatefulWidget {
 class _PembayaranWidgetState extends ConsumerState<PembayaranWidget> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nisnController = TextEditingController();
-  final TextEditingController _totalBayar = TextEditingController();
+  final TextEditingController _totalTagihan = TextEditingController();
 
   String? _currentSiswa;
   String? _currentEmail;
@@ -440,7 +440,7 @@ class _PembayaranWidgetState extends ConsumerState<PembayaranWidget> {
                             keyboardType: TextInputType.number,
                             style: const TextStyle(color: Colors.white),
                             cursorColor: Colors.white,
-                            controller: _totalBayar,
+                            controller: _totalTagihan,
                             decoration: InputDecoration(
                               prefixIcon: const Icon(
                                 Icons.attach_money_rounded,
@@ -455,7 +455,7 @@ class _PembayaranWidgetState extends ConsumerState<PembayaranWidget> {
                                   borderRadius: BorderRadius.circular(20),
                                   borderSide: const BorderSide(
                                       color: Colors.white, width: 2)),
-                              labelText: 'Total Bayar',
+                              labelText: 'Total Tagihan',
                               labelStyle: const TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white),
@@ -482,7 +482,8 @@ class _PembayaranWidgetState extends ConsumerState<PembayaranWidget> {
                                         bulanBayar: _selectedMonth,
                                         tahunBayar: _selectedYear,
                                         namaPetugas: currentUser.nama,
-                                        jmlBayar: int.parse(_totalBayar.text),
+                                        jmlTagihan:
+                                            int.tryParse(_totalTagihan.text),
                                       );
                                       await ref
                                           .read(pembayaranControllerProvider
@@ -501,7 +502,7 @@ class _PembayaranWidgetState extends ConsumerState<PembayaranWidget> {
                                     }
                                   },
                                   child: Text(
-                                    'Bayar',
+                                    'Buat Tagihan',
                                     style: TextStyle(
                                         color: HexColor('204FA1'),
                                         fontSize: 16.0,

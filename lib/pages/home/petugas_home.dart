@@ -13,15 +13,16 @@ import 'package:myspp_app/model/log_history.dart';
 import 'package:myspp_app/pages/pembayaran/pembayaran_view.dart';
 import 'package:myspp_app/pages/pengguna/data_pengguna.dart';
 import 'package:myspp_app/pages/siswa/data_siswa.dart';
+import 'package:myspp_app/pages/siswa/data_siswa_petugas.dart';
 
-class AdminHome extends ConsumerStatefulWidget {
-  const AdminHome({super.key});
+class PetugasHome extends ConsumerStatefulWidget {
+  const PetugasHome({super.key});
 
   @override
-  ConsumerState<AdminHome> createState() => _AdminHomeState();
+  ConsumerState<PetugasHome> createState() => PetugasHomeState();
 }
 
-class _AdminHomeState extends ConsumerState<AdminHome> {
+class PetugasHomeState extends ConsumerState<PetugasHome> {
   @override
   void initState() {
     super.initState();
@@ -178,7 +179,7 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
                                       ),
                                       const SizedBox(height: 8.0),
                                       Text(
-                                        'Selamat Datang Admin!',
+                                        'Selamat Datang Petugas!',
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             color: HexColor('AEAEAE')),
@@ -206,7 +207,7 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
             ),
             const SizedBox(height: 40.0),
             SvgPicture.asset(
-              'assets/img/admin-hero.svg',
+              'assets/img/petugas-hero.svg',
               width: 150.0,
             ),
             const SizedBox(height: 40.0),
@@ -265,15 +266,8 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const DataSiswa()));
+                                            const DataSiswaPetugas()));
                               }, 'assets/img/siswaWidget.svg'),
-                              menuWidget(() {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const DataPengguna()));
-                              }, 'assets/img/penggunaWidget.svg'),
                               menuWidget(() {
                                 Navigator.push(
                                     context,

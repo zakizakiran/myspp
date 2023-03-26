@@ -25,8 +25,8 @@ class PdfInvoiceService {
   Future<Uint8List> createinvoice({required Pembayaran pembayaran}) async {
     final pdf = pw.Document();
     final List<CustomRow> elements = [
-      CustomRow("Nama Siswa", "NISN", "Total Bayar", "Bulan Bayar",
-          "Tahun Bayar", "Status", ""),
+      CustomRow("Nama Siswa", "NISN", "Total Bayar", "Bulan Bayar", "Tahun",
+          "Status", ""),
       CustomRow(
           pembayaran.namaSiswa.toString(),
           pembayaran.nisn.toString(),
@@ -81,7 +81,7 @@ class PdfInvoiceService {
                 'Tanggal Transaksi    :   ${DateFormat.yMMMMEEEEd('id').format(DateTime.tryParse(pembayaran.tglTransaksi.toString())!)}',
               ),
               pw.SizedBox(height: 10.0),
-              pembayaran.jmlBayar! >= 200000
+              pembayaran.jmlBayar! >= pembayaran.jmlTagihan!.toInt()
                   ? pw.Text('Status Pembayaran  :   Lunas')
                   : pw.Text('Status Pembayaran  :   Belum Lunas'),
               pw.SizedBox(height: 50.0),

@@ -171,7 +171,9 @@ class _LunasPembayaranState extends ConsumerState<LunasPembayaran> {
                                 bulanBayar: widget.pembayaran.bulanBayar,
                                 tahunBayar: widget.pembayaran.tahunBayar,
                                 namaPetugas: widget.pembayaran.namaPetugas,
-                                tglTransaksi: widget.pembayaran.tglTransaksi,
+                                tglTransaksi: DateTime.now(),
+                                tglDibuat: widget.pembayaran.tglDibuat,
+                                jmlTagihan: widget.pembayaran.jmlTagihan,
                               );
                               await ref
                                   .read(pembayaranControllerProvider.notifier)

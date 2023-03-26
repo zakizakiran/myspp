@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
-import 'package:myspp_app/navigation/navbar.dart';
+import 'package:myspp_app/navigation/navbar_user.dart';
 
 class UserSplash extends ConsumerStatefulWidget {
   const UserSplash({super.key});

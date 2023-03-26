@@ -9,7 +9,8 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:logger/logger.dart';
 import 'package:myspp_app/components/snackbars.dart';
 import 'package:myspp_app/model/users.dart';
-import 'package:myspp_app/navigation/navbar.dart';
+import 'package:myspp_app/navigation/navbar_petugas.dart';
+import 'package:myspp_app/navigation/navbar_user.dart';
 import 'package:myspp_app/navigation/navbar_admin.dart';
 import 'package:myspp_app/pages/auth/forgot_pass/mail_check.dart';
 import 'package:myspp_app/pages/auth/login.dart';
@@ -194,7 +195,7 @@ class AuthController extends StateNotifier<Users> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const AdminNavigation(),
+              builder: (context) => const PetugasNavigation(),
             ),
           );
         } else {
@@ -232,7 +233,7 @@ class AuthController extends StateNotifier<Users> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const AdminNavigation(),
+              builder: (context) => const PetugasNavigation(),
             ),
           );
         } else {
