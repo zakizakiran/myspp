@@ -1,6 +1,7 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:myspp_app/navigation/screen_index_admin.dart';
 
 class AdminNavigation extends StatefulWidget {
@@ -22,17 +23,21 @@ class _AdminNavigationState extends State<AdminNavigation> {
           mainAxisAlignment: MainAxisAlignment.center,
           rippleColor: Colors.grey[300]!,
           hoverColor: Colors.grey[100]!,
-          gap: 8,
-          activeColor: Colors.black,
+          gap: 5,
+          activeColor: Colors.white,
           iconSize: 24,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
           duration: const Duration(milliseconds: 400),
-          tabBackgroundColor: Colors.grey[100]!,
-          color: Colors.black,
+          tabBackgroundColor: HexColor('204FA1'),
+          color: HexColor('204FA1'),
           tabs: const [
             GButton(
-              icon: EvaIcons.home,
-              text: 'Home',
+              icon: Icons.home_rounded,
+              text: 'Beranda',
+            ),
+            GButton(
+              icon: Icons.monetization_on_rounded,
+              text: 'Pembayaran',
             ),
             GButton(
               icon: Icons.history,
