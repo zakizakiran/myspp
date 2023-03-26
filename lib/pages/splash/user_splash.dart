@@ -29,7 +29,7 @@ class UserSplashState extends ConsumerState<UserSplash> {
   @override
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
-      splash: 'assets/img/logo2.png',
+      splash: 'assets/img/logo.png',
       nextScreen: Builder(builder: (context) {
         return const UserNavigation();
       }),
