@@ -1,0 +1,76 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:myspp_app/model/pembayaran.dart';
+
+class PembayaranController extends StateNotifier<List<Pembayaran>> {
+  PembayaranController() : super([]);
+
+  final db = FirebaseFirestore.instance.collection('pembayaran');
+
+  Future<void> getPembayaran() async {
+    var checkPembayaran = await db.get();
+
+    List<Pembayaran> pembayarans =
+        checkPembayaran.docs.map((e) => Pembayaran.fromJson(e.data())).toList();
+    state = pembayarans;
+  }
+
+  Future<void> getPembayaranUser() async {
+    var checkPembayaran = await db
+        .where('email_siswa',
+            isEqualTo: FirebaseAuth.instance.currentUser!.email)
+        .get();
+
+    List<Pembayaran> pembayarans =
+        checkPembayaran.docs.map((e) => Pembayaran.fromJson(e.data())).toList();
+    state = pembayarans;
+  }
+
+  Future<void> tambahPembayaran({
+    required BuildContext context,
+    required Pembayaran pembayaran,
+  }) async {
+    final doc = db.doc();
+    showDialog(
+        context: context,
+        builder: (context) => Center(
+              child: CircularProgressIndicator(
+                backgroundColor: HexColor('204FA1'),
+              ),
+            ));
+    Pembayaran temp = pembayaran.copyWith(
+      pid: doc.id,
+      tglTransaksi: DateTime.now(),
+    );
+    await doc.set(temp.toJson());
+    if (!mounted) return;
+    Navigator.pop(context);
+  }
+
+  Future<void> updateBayar(
+      {required BuildContext context,
+      required Pembayaran pembayaran,
+      required String pid}) async {
+    final doc = db.doc(pid);
+    Pembayaran temp = pembayaran.copyWith(pid: doc.id);
+    showDialog(
+        context: context,
+        builder: (context) => Center(
+              child: CircularProgressIndicator(
+                backgroundColor: HexColor('#4392A4'),
+              ),
+            ));
+    await doc.update(temp.toJson());
+    if (!mounted) return;
+    Navigator.pop(context);
+    await getPembayaran();
+  }
+}
+
+final pembayaranControllerProvider =
+    StateNotifierProvider<PembayaranController, List<Pembayaran>>(
+  (ref) => PembayaranController(),
+);
