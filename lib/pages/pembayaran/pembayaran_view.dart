@@ -20,7 +20,6 @@ class _PembayaranWidgetState extends ConsumerState<PembayaranWidget> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nisnController = TextEditingController();
   final TextEditingController _totalTagihan = TextEditingController();
-  final TextEditingController test = TextEditingController();
 
   String? _currentSiswa;
   String? _currentEmail;
