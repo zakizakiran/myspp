@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:logger/logger.dart';
 import 'package:myspp_app/model/siswa.dart';
 import 'package:myspp_app/pages/siswa/data_siswa.dart';
 
