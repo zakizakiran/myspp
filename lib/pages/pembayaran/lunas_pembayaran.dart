@@ -200,6 +200,9 @@ class _LunasPembayaranState extends ConsumerState<LunasPembayaran> {
                                     .read(pembayaranControllerProvider.notifier)
                                     .updateBayar(
                                       context: context,
+                                      jmlBayar: int.parse(_totalBayar.text),
+                                      jmlTagihan:
+                                          widget.pembayaran.jmlTagihan!.toInt(),
                                       pembayaran: pembayaran,
                                       pid: widget.pembayaran.pid.toString(),
                                     );

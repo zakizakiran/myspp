@@ -77,69 +77,7 @@ class _DetailSiswaState extends ConsumerState<DetailSiswa> {
             padding: const EdgeInsets.only(right: 12.0),
             child: IconButton(
                 onPressed: () async {
-                  showDialog(
-                      context: context,
-                      builder: (ctx) {
-                        return AlertDialog(
-                          actionsPadding: const EdgeInsets.all(20.0),
-                          actionsAlignment: MainAxisAlignment.spaceEvenly,
-                          title: const Text(
-                            'Apakah anda yakin untuk menghapusnya?',
-                            style: TextStyle(fontSize: 16.0),
-                          ),
-                          actions: [
-                            ElevatedButton(
-                              onPressed: () async {
-                                try {
-                                  await ref
-                                      .read(siswaControllerProvider.notifier)
-                                      .deleteSiswa(
-                                          context: context,
-                                          sid: widget.siswa!.sid.toString());
-                                  setState(() {});
-                                  if (!mounted) return;
-                                  Navigator.of(context)
-                                      .popUntil((_) => count++ >= 4);
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => const DataSiswa(),
-                                      ));
-                                  Snackbars().successSnackbars(context,
-                                      'Berhasil', 'Berhasil Menghapus Data');
-                                } on FirebaseException catch (e) {
-                                  Snackbars().failedSnackbars(
-                                      context, 'Gagal', e.message.toString());
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  elevation: 0,
-                                  side:
-                                      const BorderSide(color: Colors.redAccent),
-                                  padding: const EdgeInsets.all(15.0),
-                                  backgroundColor: Colors.white,
-                                  foregroundColor: Colors.redAccent,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(12.0))),
-                              child: const Text('Hapus'),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  elevation: 0,
-                                  padding: const EdgeInsets.all(15.0),
-                                  backgroundColor: HexColor('204FA1'),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(12.0))),
-                              child: const Text('Tidak'),
-                            ),
-                          ],
-                        );
-                      });
+                  await confirmDialog(context);
                 },
                 icon: const Icon(
                   EvaIcons.trash2Outline,
@@ -329,6 +267,68 @@ class _DetailSiswaState extends ConsumerState<DetailSiswa> {
         ],
       ),
     );
+  }
+
+  confirmDialog(BuildContext context) async {
+    showDialog(
+        context: context,
+        builder: (ctx) {
+          return AlertDialog(
+            actionsPadding: const EdgeInsets.all(20.0),
+            actionsAlignment: MainAxisAlignment.spaceEvenly,
+            title: const Text(
+              'Apakah anda yakin untuk menghapusnya?',
+              style: TextStyle(fontSize: 16.0),
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await ref
+                        .read(siswaControllerProvider.notifier)
+                        .deleteSiswa(
+                            context: context,
+                            sid: widget.siswa!.sid.toString());
+                    setState(() {});
+                    if (!mounted) return;
+                    Navigator.of(context).popUntil((_) => count++ >= 4);
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DataSiswa(),
+                        ));
+                    Snackbars().successSnackbars(
+                        context, 'Berhasil', 'Berhasil Menghapus Data');
+                  } on FirebaseException catch (e) {
+                    Snackbars().failedSnackbars(
+                        context, 'Gagal', e.message.toString());
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    side: const BorderSide(color: Colors.redAccent),
+                    padding: const EdgeInsets.all(15.0),
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.redAccent,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0))),
+                child: const Text('Hapus'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    padding: const EdgeInsets.all(15.0),
+                    backgroundColor: HexColor('204FA1'),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0))),
+                child: const Text('Tidak'),
+              ),
+            ],
+          );
+        });
   }
 
   Widget buildSkeleton(BuildContext context) => Padding(

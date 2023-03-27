@@ -81,7 +81,7 @@ class PdfInvoiceService {
                 'Tanggal Transaksi    :   ${DateFormat.yMMMMEEEEd('id').format(DateTime.tryParse(pembayaran.tglTransaksi.toString())!)}',
               ),
               pw.SizedBox(height: 10.0),
-              pembayaran.jmlBayar! >= pembayaran.jmlTagihan!.toInt()
+              pembayaran.jmlTagihan == 0
                   ? pw.Text('Status Pembayaran  :   Lunas')
                   : pw.Text('Status Pembayaran  :   Belum Lunas'),
               pw.SizedBox(height: 50.0),

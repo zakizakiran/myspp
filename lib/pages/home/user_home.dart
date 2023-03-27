@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
 import 'package:myspp_app/controller/pembayaran_controller.dart';
+import 'package:myspp_app/controller/pembayaran_history_controller.dart';
 import 'package:myspp_app/model/pembayaran.dart';
 
 class UserHome extends ConsumerStatefulWidget {
@@ -20,6 +22,7 @@ class _UserHomeState extends ConsumerState<UserHome> {
   void initState() {
     super.initState();
     getPembayaranUser();
+    getHistoryPembayaran();
   }
 
   List<Pembayaran> pembayaranResult = [];
@@ -28,10 +31,17 @@ class _UserHomeState extends ConsumerState<UserHome> {
     await ref.read(pembayaranControllerProvider.notifier).getPembayaranUser();
   }
 
+  Future<void> getHistoryPembayaran() async {
+    await ref
+        .read(pembayaranHistoryControllerProvider.notifier)
+        .getHistoryUser(email: FirebaseAuth.instance.currentUser!.email);
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(authControllerProvider);
     final pembayaran = ref.watch(pembayaranControllerProvider);
+    final riwayatPembayaran = ref.watch(pembayaranHistoryControllerProvider);
 
     String nama = user.nama.toString();
 
@@ -44,7 +54,7 @@ class _UserHomeState extends ConsumerState<UserHome> {
             child: Column(
               children: [
                 const Text(
-                  'Transaksi Terakhir Anda',
+                  'Riwayat Pembayaran',
                   style: TextStyle(
                     fontSize: 16.0,
                     fontWeight: FontWeight.w600,
@@ -58,29 +68,83 @@ class _UserHomeState extends ConsumerState<UserHome> {
                       decoration: BoxDecoration(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(5)),
-                          color: HexColor("FAB464")),
+                          color: HexColor('204FA1')),
                       width: 50,
                       height: 5,
                     ),
                   ],
                 ),
                 const SizedBox(height: 20.0),
-                SizedBox(
-                  height: 50,
-                  width: 250,
-                  child: Card(
-                    elevation: 0,
-                    color: HexColor('CFE2FF'),
-                    child: Center(
-                        child: Text(
-                      '12/28/2023',
-                      style: TextStyle(
-                        color: HexColor('0A58CA'),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    )),
-                  ),
-                )
+                Expanded(
+                    child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: riwayatPembayaran.length,
+                  itemBuilder: (context, index) {
+                    return SizedBox(
+                      child: Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0)),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 8.0),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(children: [
+                                  Text(
+                                    pembayaran[index].bulanBayar.toString(),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 5.0),
+                                  Text(
+                                    pembayaran[index].tahunBayar.toString(),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                ]),
+                                const SizedBox(height: 8.0),
+                                Text(NumberFormat.simpleCurrency(
+                                        locale: 'id', name: 'Rp. ')
+                                    .format(riwayatPembayaran[index].jmlBayar)),
+                                const SizedBox(height: 8.0),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      DateFormat.yMMMMEEEEd('id').format(
+                                          DateTime.tryParse(
+                                              riwayatPembayaran[index]
+                                                  .tgl
+                                                  .toString())!),
+                                      style: TextStyle(
+                                        color: HexColor('204FA1'),
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Text(
+                                      DateFormat.Hm('id').format(
+                                          DateTime.tryParse(
+                                              riwayatPembayaran[index]
+                                                  .tgl
+                                                  .toString())!),
+                                      style: TextStyle(
+                                        color: HexColor('204FA1'),
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )),
+                    );
+                  },
+                ))
               ],
             ),
           ),
@@ -234,10 +298,7 @@ class _UserHomeState extends ConsumerState<UserHome> {
                                                   pembayaran[index].jmlTagihan))
                                         ],
                                       ),
-                                      pembayaran[index].jmlBayar! >=
-                                              pembayaran[index]
-                                                  .jmlTagihan!
-                                                  .toInt()
+                                      pembayaran[index].jmlTagihan == 0
                                           ? Card(
                                               color: Colors.greenAccent[100],
                                               margin: EdgeInsets.zero,
@@ -302,7 +363,7 @@ class _UserHomeState extends ConsumerState<UserHome> {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
         // ignore: sized_box_for_whitespace
         builder: (context) => Container(
-              height: MediaQuery.of(context).size.height / 2,
+              height: MediaQuery.of(context).size.height / 1.5,
               child: Column(children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -362,6 +423,18 @@ class _UserHomeState extends ConsumerState<UserHome> {
                           .format(pembayaran.jmlTagihan)),
                       const SizedBox(height: 10.0),
                       const Text(
+                        'Jumlah Bayar',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                      const SizedBox(height: 8.0),
+                      Text(NumberFormat.simpleCurrency(
+                              locale: 'id', name: 'Rp. ')
+                          .format(pembayaran.jmlBayar)),
+                      const SizedBox(height: 10.0),
+                      const Text(
                         'Petugas',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -390,7 +463,7 @@ class _UserHomeState extends ConsumerState<UserHome> {
                         ),
                       ),
                       const SizedBox(height: 8.0),
-                      pembayaran.jmlBayar! >= pembayaran.jmlTagihan!.toInt()
+                      pembayaran.jmlTagihan == 0
                           ? Card(
                               color: Colors.greenAccent[100],
                               margin: EdgeInsets.zero,

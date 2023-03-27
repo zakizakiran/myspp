@@ -15,6 +15,17 @@ class PembayaranHistoryController
         checkLog.docs.map((e) => PembayaranHistory.fromJson(e.data())).toList();
     state = logs;
   }
+
+  Future<void> getHistoryUser({required email}) async {
+    var checkLog = await db
+        .where('email_siswa', isEqualTo: email)
+        .orderBy('tgl', descending: true)
+        .get();
+
+    List<PembayaranHistory> logs =
+        checkLog.docs.map((e) => PembayaranHistory.fromJson(e.data())).toList();
+    state = logs;
+  }
 }
 
 final pembayaranHistoryControllerProvider =

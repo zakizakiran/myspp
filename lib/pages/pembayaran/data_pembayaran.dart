@@ -214,8 +214,7 @@ class _DataPembayaranState extends ConsumerState<DataPembayaran> {
                                       ),
                                     ],
                                   ),
-                                  pembayaran[index].jmlBayar! >=
-                                          pembayaran[index].jmlTagihan!.toInt()
+                                  pembayaran[index].jmlTagihan == 0
                                       ? Card(
                                           color: Colors.greenAccent[100],
                                           margin: EdgeInsets.zero,
@@ -461,7 +460,7 @@ class _DataPembayaranState extends ConsumerState<DataPembayaran> {
                           ),
                         ),
                         const SizedBox(height: 8.0),
-                        pembayaran.jmlBayar! >= pembayaran.jmlTagihan!.toInt()
+                        pembayaran.jmlTagihan == 0
                             ? Card(
                                 color: Colors.greenAccent[100],
                                 margin: EdgeInsets.zero,
@@ -487,8 +486,7 @@ class _DataPembayaranState extends ConsumerState<DataPembayaran> {
                                   ),
                                 )),
                         const SizedBox(height: 30.0),
-                        pembayaran.jmlBayar! >= pembayaran.jmlTagihan!.toInt()
-                            // ? const SizedBox()
+                        pembayaran.jmlTagihan == 0
                             ? Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [

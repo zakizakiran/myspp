@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:myspp_app/components/snackbars.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
 
 class UserSettings extends ConsumerStatefulWidget {
@@ -43,7 +45,7 @@ class _UserSettingsState extends ConsumerState<UserSettings> {
         body: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 20.0,
-            vertical: 30.0,
+            vertical: 10.0,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,7 +102,9 @@ class _UserSettingsState extends ConsumerState<UserSettings> {
               Column(
                 children: [
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      confirmDialog(context);
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: SizedBox(
@@ -170,5 +174,55 @@ class _UserSettingsState extends ConsumerState<UserSettings> {
             ],
           ),
         ));
+  }
+
+  confirmDialog(BuildContext context) async {
+    showDialog(
+        context: context,
+        builder: (ctx) {
+          return AlertDialog(
+            actionsPadding: const EdgeInsets.all(20.0),
+            actionsAlignment: MainAxisAlignment.spaceEvenly,
+            title: const Text(
+              'Apakah anda yakin untuk keluar?',
+              style: TextStyle(fontSize: 16.0),
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await ref
+                        .read(authControllerProvider.notifier)
+                        .signOut(context);
+                  } on FirebaseAuthException catch (e) {
+                    Snackbars().failedSnackbars(
+                        context, 'Gagal', e.message.toString());
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    side: const BorderSide(color: Colors.redAccent),
+                    padding: const EdgeInsets.all(15.0),
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.redAccent,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0))),
+                child: const Text('Keluar'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    padding: const EdgeInsets.all(15.0),
+                    backgroundColor: HexColor('204FA1'),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0))),
+                child: const Text('Tidak'),
+              ),
+            ],
+          );
+        });
   }
 }

@@ -49,18 +49,6 @@ class PembayaranController extends StateNotifier<List<Pembayaran>> {
       tglTransaksi: DateTime.now(),
     );
     await doc.set(temp.toJson());
-    final dbHistoryPembayaran =
-        FirebaseFirestore.instance.collection('history_pembayaran');
-    final docID = dbHistoryPembayaran.doc();
-    await docID.set({
-      'id_history_pembayaran': docID.id,
-      'id_pembayaran': doc.id,
-      'nama_siswa': temp.namaSiswa,
-      'nisn': temp.nisn,
-      'jml_bayar': temp.jmlBayar,
-      'email_siswa': temp.emailSiswa,
-      'tgl': DateTime.now(),
-    });
     if (!mounted) return;
     Navigator.pop(context);
   }
@@ -68,9 +56,12 @@ class PembayaranController extends StateNotifier<List<Pembayaran>> {
   Future<void> updateBayar(
       {required BuildContext context,
       required Pembayaran pembayaran,
+      required int jmlTagihan,
+      required int jmlBayar,
       required String pid}) async {
     final doc = db.doc(pid);
-    Pembayaran temp = pembayaran.copyWith(pid: doc.id);
+    Pembayaran temp =
+        pembayaran.copyWith(pid: doc.id, jmlTagihan: jmlTagihan - jmlBayar);
     showDialog(
         context: context,
         builder: (context) => Center(
@@ -91,6 +82,8 @@ class PembayaranController extends StateNotifier<List<Pembayaran>> {
       'nisn': temp.nisn,
       'jml_bayar': temp.jmlBayar,
       'email_siswa': temp.emailSiswa,
+      'bulan_bayar': temp.bulanBayar,
+      'tahun_bayar': temp.tahunBayar,
       'tgl': DateTime.now(),
     });
     await getPembayaran();

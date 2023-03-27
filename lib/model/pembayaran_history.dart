@@ -5,6 +5,8 @@ class PembayaranHistory {
   String? namaSiswa;
   String? nisn;
   int? jmlBayar;
+  String? bulanBayar;
+  int? tahunBayar;
   DateTime? tgl;
 
   PembayaranHistory({
@@ -14,6 +16,8 @@ class PembayaranHistory {
     this.namaSiswa,
     this.nisn,
     this.jmlBayar,
+    this.bulanBayar,
+    this.tahunBayar,
     this.tgl,
   });
 
@@ -25,6 +29,8 @@ class PembayaranHistory {
       namaSiswa: json['nama_siswa'],
       nisn: json['nisn'],
       jmlBayar: json['jml_bayar'],
+      bulanBayar: json['bulan_bayar'],
+      tahunBayar: json['tahun_bayar'],
       tgl: DateTime.tryParse(json['tgl'].toDate().toString()),
     );
   }
@@ -37,6 +43,8 @@ class PembayaranHistory {
       'nama_siswa': namaSiswa,
       'nisn': nisn,
       'jml_bayar': jmlBayar,
+      'bulan_bayar': bulanBayar,
+      'tahun_bayar': tahunBayar,
       'tgl': tgl,
     };
   }
@@ -48,6 +56,8 @@ class PembayaranHistory {
     String? namaSiswa,
     String? nisn,
     int? jmlBayar,
+    String? bulanBayar,
+    int? tahunBayar,
     DateTime? tgl,
   }) {
     return PembayaranHistory(
@@ -57,6 +67,8 @@ class PembayaranHistory {
       namaSiswa: namaSiswa ?? this.namaSiswa,
       nisn: nisn ?? this.nisn,
       jmlBayar: jmlBayar ?? this.jmlBayar,
+      bulanBayar: bulanBayar ?? this.bulanBayar,
+      tahunBayar: tahunBayar ?? this.tahunBayar,
       tgl: tgl ?? this.tgl,
     );
   }
