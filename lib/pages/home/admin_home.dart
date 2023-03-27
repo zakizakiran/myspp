@@ -9,7 +9,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:myspp_app/components/animations/showup.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
 import 'package:myspp_app/controller/log_history_controller.dart';
-import 'package:myspp_app/model/log_history.dart';
 import 'package:myspp_app/pages/pembayaran/pembayaran_view.dart';
 import 'package:myspp_app/pages/pengguna/data_pengguna.dart';
 import 'package:myspp_app/pages/siswa/data_siswa.dart';
@@ -28,8 +27,6 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
     initializeDateFormatting();
     getAllLog();
   }
-
-  List<LogHistory> logResult = [];
 
   Future<void> getAllLog() async {
     await ref
@@ -303,10 +300,6 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
         appIcon,
         width: 100.0,
       ),
-      // child: SvgPicture.asset(
-      //   appIcon,
-      //   width: 10.0,
-      // ),
     );
   }
 }

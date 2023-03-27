@@ -11,7 +11,8 @@ class PembayaranController extends StateNotifier<List<Pembayaran>> {
   final db = FirebaseFirestore.instance.collection('pembayaran');
 
   Future<void> getPembayaran() async {
-    var checkPembayaran = await db.get();
+    var checkPembayaran =
+        await db.orderBy('tgl_dibuat', descending: true).get();
 
     List<Pembayaran> pembayarans =
         checkPembayaran.docs.map((e) => Pembayaran.fromJson(e.data())).toList();
@@ -48,6 +49,18 @@ class PembayaranController extends StateNotifier<List<Pembayaran>> {
       tglTransaksi: DateTime.now(),
     );
     await doc.set(temp.toJson());
+    final dbHistoryPembayaran =
+        FirebaseFirestore.instance.collection('history_pembayaran');
+    final docID = dbHistoryPembayaran.doc();
+    await docID.set({
+      'id_history_pembayaran': docID.id,
+      'id_pembayaran': doc.id,
+      'nama_siswa': temp.namaSiswa,
+      'nisn': temp.nisn,
+      'jml_bayar': temp.jmlBayar,
+      'email_siswa': temp.emailSiswa,
+      'tgl': DateTime.now(),
+    });
     if (!mounted) return;
     Navigator.pop(context);
   }
@@ -68,6 +81,18 @@ class PembayaranController extends StateNotifier<List<Pembayaran>> {
     await doc.update(temp.toJson());
     if (!mounted) return;
     Navigator.pop(context);
+    final dbHistoryPembayaran =
+        FirebaseFirestore.instance.collection('history_pembayaran');
+    final docID = dbHistoryPembayaran.doc();
+    await docID.set({
+      'id_history_pembayaran': docID.id,
+      'id_pembayaran': doc.id,
+      'nama_siswa': temp.namaSiswa,
+      'nisn': temp.nisn,
+      'jml_bayar': temp.jmlBayar,
+      'email_siswa': temp.emailSiswa,
+      'tgl': DateTime.now(),
+    });
     await getPembayaran();
   }
 }

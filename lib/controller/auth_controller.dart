@@ -16,6 +16,7 @@ import 'package:myspp_app/pages/auth/forgot_pass/mail_check.dart';
 import 'package:myspp_app/pages/auth/login.dart';
 import 'package:myspp_app/pages/pengguna/data_pengguna.dart';
 import 'package:myspp_app/pages/splash/admin_splash.dart';
+import 'package:myspp_app/pages/splash/petugas_splash.dart';
 import 'package:myspp_app/pages/splash/user_splash.dart';
 
 class AuthController extends StateNotifier<Users> {
@@ -227,7 +228,7 @@ class AuthController extends StateNotifier<Users> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const PetugasNavigation(),
+              builder: (context) => const PetugasSplash(),
             ),
           );
         } else {

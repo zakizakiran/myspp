@@ -19,6 +19,7 @@ class DataPembayaran extends ConsumerStatefulWidget {
 
 class _DataPembayaranState extends ConsumerState<DataPembayaran> {
   final PdfInvoiceService service = PdfInvoiceService();
+  TextEditingController search = TextEditingController();
 
   @override
   void initState() {
@@ -36,164 +37,246 @@ class _DataPembayaranState extends ConsumerState<DataPembayaran> {
   Widget build(BuildContext context) {
     var pembayaran = ref.watch(pembayaranControllerProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        flexibleSpace: SafeArea(
-          child: Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 20.0),
-                child: Text(
-                  'Data Pembayaran',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w600,
+    void updateList(String value) {
+      try {
+        if (value != '') {
+          pembayaranResult.clear();
+          var temp = pembayaran
+              .where((element) =>
+                  element.namaSiswa!
+                      .toLowerCase()
+                      .contains(value.toLowerCase()) ||
+                  element.nisn!.toLowerCase().contains(value.toLowerCase()))
+              .toList();
+          temp.map((e) => pembayaranResult.add(e)).toList();
+        } else {
+          pembayaranResult.clear();
+        }
+      } catch (e) {
+        Logger().e(e);
+      }
+    }
+
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          flexibleSpace: SafeArea(
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 20.0),
+                  child: Text(
+                    'Data Pembayaran',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 5.0),
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    color: HexColor('673ab7')),
-                width: 50,
-                height: 5,
-              ),
-            ],
+                const SizedBox(height: 5.0),
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+                      color: HexColor('673ab7')),
+                  width: 50,
+                  height: 5,
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 10.0),
-        child: ListView.builder(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 5.0),
-          itemCount: pembayaran.length,
-          itemBuilder: (ctx, index) {
-            return InkWell(
-              onTap: () {
-                DetailBottomSheet(
-                    context: ctx,
-                    pembayaran: pembayaran[index],
-                    result: index,
-                    lunasButton: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LunasPembayaran(
-                                    pembayaran: pembayaran[index],
-                                  )));
-                    });
-              },
-              child: Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.0)),
-                child: Padding(
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: TextField(
+                  textInputAction: TextInputAction.search,
+                  style: const TextStyle(color: Colors.black),
+                  controller: search,
+                  onChanged: (value) {
+                    updateList(value);
+                    setState(() {});
+                  },
+                  decoration: InputDecoration(
+                    suffixIcon: search.text.isNotEmpty
+                        ? IconButton(
+                            splashRadius: 20,
+                            onPressed: () {
+                              search.text = '';
+                              FocusScope.of(context).unfocus();
+                            },
+                            icon: Icon(
+                              Icons.clear,
+                              color: HexColor('204FA1'),
+                            ))
+                        : null,
+                    hintText: 'cari nama atau nis siswa ',
+                    hintStyle: TextStyle(color: Colors.grey[400]),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        borderSide: const BorderSide(color: Colors.grey)),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        borderSide: const BorderSide(color: Colors.white)),
+                    prefixIcon: Icon(
+                      EvaIcons.search,
+                      color: HexColor('204FA1'),
+                    ),
+                  )),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 18.0, vertical: 16.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                      horizontal: 18.0, vertical: 5.0),
+                  itemCount: pembayaran.length,
+                  itemBuilder: (ctx, index) {
+                    return InkWell(
+                      onTap: () {
+                        DetailBottomSheet(
+                            context: ctx,
+                            pembayaran: pembayaran[index],
+                            result: index,
+                            lunasButton: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LunasPembayaran(
+                                            pembayaran: pembayaran[index],
+                                          )));
+                            });
+                      },
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 18.0, vertical: 16.0),
+                          child: Column(
                             children: [
-                              SizedBox(
-                                  width: 150,
-                                  child: Text(
-                                    pembayaran[index].namaSiswa.toString(),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15.0,
-                                    ),
-                                  )),
-                              const SizedBox(height: 5.0),
-                              Text(
-                                pembayaran[index].nisn.toString(),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.grey[400],
-                                ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                          width: 150,
+                                          child: Text(
+                                            pembayaran[index]
+                                                .namaSiswa
+                                                .toString(),
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15.0,
+                                            ),
+                                          )),
+                                      const SizedBox(height: 5.0),
+                                      Text(
+                                        pembayaran[index].nisn.toString(),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.grey[400],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10.0),
+                                      SizedBox(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              'Petugas: ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            const SizedBox(height: 5.0),
+                                            Text(
+                                              pembayaran[index]
+                                                  .namaPetugas
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: HexColor('204FA1')),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  pembayaran[index].jmlBayar! >=
+                                          pembayaran[index].jmlTagihan!.toInt()
+                                      ? Card(
+                                          color: Colors.greenAccent[100],
+                                          margin: EdgeInsets.zero,
+                                          child: const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 3.0,
+                                                horizontal: 10.0),
+                                            child: Text(
+                                              'Lunas',
+                                              style: TextStyle(
+                                                  color: Colors.green),
+                                            ),
+                                          ))
+                                      : Card(
+                                          color: Colors.grey[200],
+                                          margin: EdgeInsets.zero,
+                                          child: const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 3.0, horizontal: 8.0),
+                                            child: Text(
+                                              'Belum Lunas',
+                                              style:
+                                                  TextStyle(color: Colors.grey),
+                                            ),
+                                          )),
+                                ],
                               ),
-                              const SizedBox(height: 10.0),
-                              SizedBox(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Petugas: ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    const SizedBox(height: 5.0),
-                                    Text(
-                                      pembayaran[index].namaPetugas.toString(),
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: HexColor('204FA1')),
-                                    )
-                                  ],
-                                ),
-                              ),
+                              const SizedBox(height: 20.0),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        pembayaran[index].bulanBayar.toString(),
+                                        style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      const SizedBox(width: 5.0),
+                                      Text(
+                                          pembayaran[index]
+                                              .tahunBayar
+                                              .toString(),
+                                          style: const TextStyle(
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.w600)),
+                                    ],
+                                  )
+                                ],
+                              )
                             ],
                           ),
-                          pembayaran[index].jmlBayar! >=
-                                  pembayaran[index].jmlTagihan!.toInt()
-                              ? Card(
-                                  color: Colors.greenAccent[100],
-                                  margin: EdgeInsets.zero,
-                                  child: const Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 3.0, horizontal: 10.0),
-                                    child: Text(
-                                      'Lunas',
-                                      style: TextStyle(color: Colors.green),
-                                    ),
-                                  ))
-                              : Card(
-                                  color: Colors.grey[200],
-                                  margin: EdgeInsets.zero,
-                                  child: const Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 3.0, horizontal: 8.0),
-                                    child: Text(
-                                      'Belum Lunas',
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
-                                  )),
-                        ],
+                        ),
                       ),
-                      const SizedBox(height: 20.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                pembayaran[index].bulanBayar.toString(),
-                                style: const TextStyle(
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              const SizedBox(width: 5.0),
-                              Text(pembayaran[index].tahunBayar.toString(),
-                                  style: const TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.w600)),
-                            ],
-                          )
-                        ],
-                      )
-                    ],
-                  ),
+                    );
+                  },
                 ),
               ),
-            );
-          },
+            ),
+          ],
         ),
       ),
     );

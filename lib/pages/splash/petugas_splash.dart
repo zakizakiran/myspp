@@ -1,17 +1,17 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
-import 'package:myspp_app/navigation/navbar_user.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:myspp_app/navigation/navbar_petugas.dart';
 
-class UserSplash extends ConsumerStatefulWidget {
-  const UserSplash({super.key});
+class PetugasSplash extends ConsumerStatefulWidget {
+  const PetugasSplash({super.key});
 
   @override
-  ConsumerState<UserSplash> createState() => UserSplashState();
+  ConsumerState<PetugasSplash> createState() => _PetugasSplashState();
 }
 
-class UserSplashState extends ConsumerState<UserSplash> {
+class _PetugasSplashState extends ConsumerState<PetugasSplash> {
   @override
   void initState() {
     super.initState();
@@ -27,7 +27,7 @@ class UserSplashState extends ConsumerState<UserSplash> {
     return AnimatedSplashScreen(
       splash: 'assets/img/logo.png',
       nextScreen: Builder(builder: (context) {
-        return const UserNavigation();
+        return const PetugasNavigation();
       }),
       splashTransition: SplashTransition.fadeTransition,
       splashIconSize: 250,
