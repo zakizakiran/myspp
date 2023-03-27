@@ -1,4 +1,4 @@
-import 'dart:developer';
+// import 'dart:developer';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -94,11 +94,8 @@ class AuthController extends StateNotifier<Users> {
       Snackbars()
           .successSnackbars(context, 'Berhasil', 'Berhasil Menambah Akun');
     } on FirebaseAuthException catch (e) {
-      // Do something with exception. This try/catch is here to make sure
-      // that even if the user creation fails, app.delete() runs, if is not,
-      // next time Firebase.initializeApp() will fail as the previous one was
-      // not deleted.
-      log(e.message.toString());
+      // ignore: use_build_context_synchronously
+      Snackbars().failedSnackbars(context, 'Gagal', e.message.toString());
     }
 
     await app.delete();
@@ -145,11 +142,8 @@ class AuthController extends StateNotifier<Users> {
       Snackbars()
           .successSnackbars(context, 'Berhasil', 'Berhasil Menambah Akun');
     } on FirebaseAuthException catch (e) {
-      // Do something with exception. This try/catch is here to make sure
-      // that even if the user creation fails, app.delete() runs, if is not,
-      // next time Firebase.initializeApp() will fail as the previous one was
-      // not deleted.
-      log(e.message.toString());
+      // ignore: use_build_context_synchronously
+      Snackbars().failedSnackbars(context, 'Gagal', e.message.toString());
     }
 
     await app.delete();

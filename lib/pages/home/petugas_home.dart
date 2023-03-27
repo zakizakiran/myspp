@@ -11,8 +11,6 @@ import 'package:myspp_app/controller/auth_controller.dart';
 import 'package:myspp_app/controller/log_history_controller.dart';
 import 'package:myspp_app/model/log_history.dart';
 import 'package:myspp_app/pages/pembayaran/pembayaran_view.dart';
-import 'package:myspp_app/pages/pengguna/data_pengguna.dart';
-import 'package:myspp_app/pages/siswa/data_siswa.dart';
 import 'package:myspp_app/pages/siswa/data_siswa_petugas.dart';
 
 class PetugasHome extends ConsumerStatefulWidget {
