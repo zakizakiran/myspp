@@ -9,14 +9,6 @@ import 'package:myspp_app/controller/auth_controller.dart';
 import 'package:myspp_app/controller/pembayaran_controller.dart';
 import 'package:myspp_app/model/pembayaran.dart';
 
-class Student {
-  final String email;
-  final String nisn;
-  final String uid;
-
-  Student({required this.email, required this.nisn, required this.uid});
-}
-
 class PembayaranWidget extends ConsumerStatefulWidget {
   const PembayaranWidget({super.key});
 
