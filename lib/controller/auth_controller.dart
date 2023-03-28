@@ -104,9 +104,18 @@ class AuthController extends StateNotifier<Users> {
     return Future.sync(() => FirebaseAuth.instanceFor(app: app));
   }
 
-  Future<void> registerSiswa(BuildContext context, String email,
-      String password, String nama, String telp, String alamat, String level,
-      {required String sid, required String nisn}) async {
+  Future<void> registerSiswa(
+    BuildContext context,
+    String email,
+    String password,
+    String nama,
+    String telp,
+    String alamat,
+    String level, {
+    required String sid,
+    required String nisn,
+    required String kelas,
+  }) async {
     FirebaseApp app = await Firebase.initializeApp(
         name: 'Secondary', options: Firebase.app().options);
     try {
@@ -119,6 +128,7 @@ class AuthController extends StateNotifier<Users> {
         'uid': userCredential.user!.uid,
         'email': email,
         'nama': nama,
+        'kelas': kelas,
         'telp': telp,
         'alamat': alamat,
         'level': level,

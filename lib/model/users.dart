@@ -1,6 +1,7 @@
 class Users {
   String? uid;
   String? nama;
+  String? kelas;
   String? email;
   String? level;
   String? telp;
@@ -12,6 +13,7 @@ class Users {
   Users(
       {this.uid,
       this.nama,
+      this.kelas,
       this.email,
       this.alamat,
       this.level,
@@ -23,6 +25,7 @@ class Users {
     return Users(
         uid: json['uid'],
         nama: json['nama'],
+        kelas: json['kelas'],
         email: json['email'],
         alamat: json['alamat'],
         level: json['level'],
@@ -35,6 +38,7 @@ class Users {
     return {
       'uid': uid,
       'nama': nama,
+      'kelas': kelas,
       'email': email,
       'alamat': alamat,
       'level': level,
@@ -47,6 +51,7 @@ class Users {
   Users copyWith(
       {String? uid,
       String? nama,
+      String? kelas,
       String? email,
       String? level,
       String? telp,
@@ -56,6 +61,7 @@ class Users {
     return Users(
         uid: uid ?? this.uid,
         nama: nama ?? this.nama,
+        kelas: kelas ?? this.kelas,
         email: email ?? this.email,
         level: level ?? this.level,
         telp: telp ?? this.telp,

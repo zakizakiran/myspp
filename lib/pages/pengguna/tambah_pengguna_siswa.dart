@@ -389,6 +389,7 @@ class _TambahPenggunaSiswaState extends ConsumerState<TambahPenggunaSiswa> {
                                   alamat.text,
                                   sid: widget.siswa!.sid.toString(),
                                   nisn: widget.siswa!.nisn.toString(),
+                                  kelas: widget.siswa!.kelas.toString(),
                                   _currentRole.toString(),
                                 );
                             setState(() {});

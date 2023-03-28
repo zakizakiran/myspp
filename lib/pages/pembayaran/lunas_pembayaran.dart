@@ -185,7 +185,8 @@ class _LunasPembayaranState extends ConsumerState<LunasPembayaran> {
                             onPressed: () async {
                               try {
                                 Pembayaran pembayaran = Pembayaran(
-                                  jmlBayar: int.parse(_totalBayar.text),
+                                  jmlBayar: int.parse(_totalBayar.text) +
+                                      widget.pembayaran.jmlBayar!.toInt(),
                                   namaSiswa: widget.pembayaran.namaSiswa,
                                   nisn: widget.pembayaran.nisn,
                                   emailSiswa: widget.pembayaran.emailSiswa,

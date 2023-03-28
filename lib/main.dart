@@ -9,6 +9,7 @@ import 'package:myspp_app/firebase_options.dart';
 import 'package:myspp_app/pages/splash/admin_splash.dart';
 import 'package:myspp_app/pages/splash/user_splash.dart';
 import 'package:myspp_app/pages/splash/splash.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(
@@ -20,6 +21,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await RoleName().chooseRole();
+  initializeDateFormatting();
   runApp(const ProviderScope(child: MySppApp()));
 }
 

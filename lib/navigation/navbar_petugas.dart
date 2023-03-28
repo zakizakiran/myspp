@@ -40,6 +40,10 @@ class _PetugasNavigationState extends State<PetugasNavigation> {
               text: 'Pembayaran',
             ),
             GButton(
+              icon: Icons.history,
+              text: 'Riwayat',
+            ),
+            GButton(
               icon: EvaIcons.settings,
               text: 'Settings',
             ),

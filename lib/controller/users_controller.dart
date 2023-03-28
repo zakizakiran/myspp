@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myspp_app/components/snackbars.dart';
 import 'package:myspp_app/model/users.dart';
+import 'package:myspp_app/pages/auth/login.dart';
 
 class UsersController extends StateNotifier<List<Users>> {
   UsersController() : super([]);
@@ -24,23 +24,38 @@ class UsersController extends StateNotifier<List<Users>> {
   Future<void> deleteUser(
       {required BuildContext context,
       required String email,
-      required dynamic password}) async {
-    var index = 0;
-    index = index++;
-    FirebaseApp app = await Firebase.initializeApp(
-        name: 'Secondary{$index}', options: Firebase.app().options);
-    User? userCredential = FirebaseAuth.instanceFor(app: app).currentUser!;
+      required String password,
+      required String uid}) async {
+    User? userCredential = FirebaseAuth.instance.currentUser!;
 
     AuthCredential credential =
         EmailAuthProvider.credential(email: email, password: password);
 
-    await userCredential.reauthenticateWithCredential(credential).then((value) {
-      value.user!.delete().then((res) {
-        Snackbars().successSnackbars(context, 'Berhasl', 'Yeay');
+    try {
+      await userCredential
+          .reauthenticateWithCredential(credential)
+          .then((value) {
+        value.user!.delete().then((res) async {
+          final db = FirebaseFirestore.instance.collection('pengguna');
+          final doc = db.doc(uid);
+          await doc.delete();
+          if (!mounted) return;
+          Snackbars()
+              .successSnackbars(context, 'Berhasil', 'Berhasil Menghapus Akun');
+          Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (BuildContext context) {
+                return const Login();
+              },
+            ),
+            (_) => false,
+          );
+        });
       });
-
-      app.delete();
-    });
+    } on FirebaseAuthException catch (e) {
+      Snackbars().failedSnackbars(context, 'Gagal', e.message.toString());
+      Navigator.pop(context);
+    }
   }
 }
 

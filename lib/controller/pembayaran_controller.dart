@@ -80,7 +80,7 @@ class PembayaranController extends StateNotifier<List<Pembayaran>> {
       'id_pembayaran': doc.id,
       'nama_siswa': temp.namaSiswa,
       'nisn': temp.nisn,
-      'jml_bayar': temp.jmlBayar,
+      'jml_bayar': jmlBayar,
       'email_siswa': temp.emailSiswa,
       'bulan_bayar': temp.bulanBayar,
       'tahun_bayar': temp.tahunBayar,

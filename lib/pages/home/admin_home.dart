@@ -5,7 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:myspp_app/components/animations/showup.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
 import 'package:myspp_app/controller/log_history_controller.dart';
@@ -24,7 +23,6 @@ class _AdminHomeState extends ConsumerState<AdminHome> {
   @override
   void initState() {
     super.initState();
-    initializeDateFormatting();
     getAllLog();
   }
 

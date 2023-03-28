@@ -93,14 +93,18 @@ class _UserHomeState extends ConsumerState<UserHome> {
                               children: [
                                 Row(children: [
                                   Text(
-                                    pembayaran[index].bulanBayar.toString(),
+                                    riwayatPembayaran[index]
+                                        .bulanBayar
+                                        .toString(),
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   const SizedBox(width: 5.0),
                                   Text(
-                                    pembayaran[index].tahunBayar.toString(),
+                                    riwayatPembayaran[index]
+                                        .tahunBayar
+                                        .toString(),
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -292,10 +296,14 @@ class _UserHomeState extends ConsumerState<UserHome> {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           const SizedBox(height: 5.0),
-                                          Text(NumberFormat.simpleCurrency(
-                                                  locale: 'id', name: 'Rp. ')
-                                              .format(
-                                                  pembayaran[index].jmlTagihan))
+                                          pembayaran[index].jmlTagihan == 0
+                                              ? const Text('-')
+                                              : Text(
+                                                  NumberFormat.simpleCurrency(
+                                                          locale: 'id',
+                                                          name: 'Rp. ')
+                                                      .format(pembayaran[index]
+                                                          .jmlTagihan))
                                         ],
                                       ),
                                       pembayaran[index].jmlTagihan == 0
@@ -418,9 +426,11 @@ class _UserHomeState extends ConsumerState<UserHome> {
                         ),
                       ),
                       const SizedBox(height: 8.0),
-                      Text(NumberFormat.simpleCurrency(
-                              locale: 'id', name: 'Rp. ')
-                          .format(pembayaran.jmlTagihan)),
+                      pembayaran.jmlTagihan == 0
+                          ? const Text('-')
+                          : Text(NumberFormat.simpleCurrency(
+                                  locale: 'id', name: 'Rp. ')
+                              .format(pembayaran.jmlTagihan)),
                       const SizedBox(height: 10.0),
                       const Text(
                         'Jumlah Bayar',
