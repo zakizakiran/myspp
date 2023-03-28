@@ -17,7 +17,6 @@ class LaporanPembayaran {
       "Bulan Bayar",
       "Tahun Bayar",
       "Tanggal Transaksi",
-      ""
     ]);
 
     // Tambahkan baris data model ke dalam CSV
