@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:csv/csv.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:myspp_app/components/bukti_pembayaran.dart';
+import 'package:myspp_app/components/laporan_pembayaran.dart';
 import 'package:myspp_app/controller/pembayaran_controller.dart';
 import 'package:myspp_app/model/pembayaran.dart';
 import 'package:myspp_app/pages/pembayaran/lunas_pembayaran.dart';
@@ -20,6 +24,7 @@ class DataPembayaran extends ConsumerStatefulWidget {
 
 class _DataPembayaranState extends ConsumerState<DataPembayaran> {
   final PdfInvoiceService service = PdfInvoiceService();
+  final LaporanPembayaran laporanPembayaran = LaporanPembayaran();
   TextEditingController search = TextEditingController();
 
   @override
@@ -64,6 +69,21 @@ class _DataPembayaranState extends ConsumerState<DataPembayaran> {
       },
       child: Scaffold(
         appBar: AppBar(
+          actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: IconButton(
+                  onPressed: () {
+                    try {
+                      laporanPembayaran.saveDataToCSV(context, pembayaran,
+                          "Laporan Pembayaran ${DateFormat.yMMMMEEEEd('id').format(DateTime.now())}.csv");
+                    } catch (e) {
+                      Logger().i(e);
+                    }
+                  },
+                  icon: const Icon(EvaIcons.fileAddOutline)),
+            )
+          ],
           elevation: 0,
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,

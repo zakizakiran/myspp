@@ -60,6 +60,7 @@ dependencies:
   pdf: ^3.9.0
   path_provider: ^2.0.14
   open_document: ^1.0.6+2
+  csv: ^5.0.1
 
 dev_dependencies:
   flutter_test:
