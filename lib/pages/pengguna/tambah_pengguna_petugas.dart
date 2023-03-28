@@ -9,18 +9,17 @@ import 'package:myspp_app/components/get_role.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
 import 'package:myspp_app/controller/siswa_controller.dart';
 import 'package:myspp_app/model/siswa.dart';
-import 'package:myspp_app/pages/pengguna/data_pengguna.dart';
 
-class TambahPenggunaSiswa extends ConsumerStatefulWidget {
+class TambahPenggunaPetugas extends ConsumerStatefulWidget {
   final Siswa? siswa;
-  const TambahPenggunaSiswa({super.key, required this.siswa});
+  const TambahPenggunaPetugas({super.key, required this.siswa});
 
   @override
-  ConsumerState<TambahPenggunaSiswa> createState() =>
-      _TambahPenggunaSiswaState();
+  ConsumerState<TambahPenggunaPetugas> createState() =>
+      _TambahPenggunaPetugasState();
 }
 
-class _TambahPenggunaSiswaState extends ConsumerState<TambahPenggunaSiswa> {
+class _TambahPenggunaPetugasState extends ConsumerState<TambahPenggunaPetugas> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -348,11 +347,7 @@ class _TambahPenggunaSiswaState extends ConsumerState<TambahPenggunaSiswa> {
                                   _currentRole.toString(),
                                 );
                             if (!mounted) return;
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const DataPengguna()));
+                            Navigator.pop(context);
                             setState(() {});
                           } on FirebaseAuthException catch (e) {
                             log(e.message.toString());

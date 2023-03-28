@@ -131,7 +131,7 @@ class AuthController extends StateNotifier<Users> {
         'kelas': kelas,
         'telp': telp,
         'alamat': alamat,
-        'level': level,
+        'level': 'Siswa',
         'sid': sid,
         'nisn': nisn
       });
@@ -147,8 +147,7 @@ class AuthController extends StateNotifier<Users> {
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
       // ignore: use_build_context_synchronously
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const DataPengguna()));
+
       // ignore: use_build_context_synchronously
       Snackbars()
           .successSnackbars(context, 'Berhasil', 'Berhasil Menambah Akun');

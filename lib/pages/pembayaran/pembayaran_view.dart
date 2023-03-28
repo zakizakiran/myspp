@@ -488,7 +488,7 @@ class _PembayaranWidgetState extends ConsumerState<PembayaranWidget> {
                                       Snackbars().successSnackbars(
                                           context,
                                           'Berhasil',
-                                          'Berhasil Melakukan Pembayaran!');
+                                          'Berhasil Membuat Tagihan!');
                                     } on FirebaseException catch (e) {
                                       Logger().i(e.message);
                                     }

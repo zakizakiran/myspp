@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:myspp_app/model/pembayaran.dart';
 import 'package:open_document/open_document.dart';
@@ -16,6 +17,7 @@ class LaporanPembayaran {
       "Tagihan",
       "Bulan Bayar",
       "Tahun Bayar",
+      "Jumlah Bayar",
       "Tanggal Transaksi",
     ]);
 
@@ -24,10 +26,14 @@ class LaporanPembayaran {
       rows.add([
         model.namaSiswa,
         model.nisn,
-        model.jmlTagihan,
+        NumberFormat.simpleCurrency(locale: 'id', name: 'Rp. ')
+            .format(model.jmlTagihan),
         model.bulanBayar,
         model.tahunBayar,
-        model.tglTransaksi,
+        NumberFormat.simpleCurrency(locale: 'id', name: 'Rp. ')
+            .format(model.jmlBayar),
+        DateFormat.yMMMMEEEEd('id')
+            .format(DateTime.tryParse(model.tglTransaksi.toString())!),
       ]);
     }
     // Konversi rows menjadi format CSV menggunakan flutter_csv

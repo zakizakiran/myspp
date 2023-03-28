@@ -9,6 +9,7 @@ import 'package:myspp_app/components/animations/showup.dart';
 import 'package:myspp_app/components/skeleton_container.dart';
 import 'package:myspp_app/controller/siswa_controller.dart';
 import 'package:myspp_app/model/siswa.dart';
+import 'package:myspp_app/pages/pengguna/tambah_pengguna_petugas.dart';
 import 'package:myspp_app/pages/pengguna/tambah_pengguna_siswa.dart';
 import 'package:myspp_app/pages/siswa/tambah_siswa.dart';
 
@@ -265,7 +266,7 @@ class _DataSiswaPetugasState extends ConsumerState<DataSiswaPetugas> {
                                                                       MaterialPageRoute(
                                                                         builder:
                                                                             (context) =>
-                                                                                TambahPenggunaSiswa(
+                                                                                TambahPenggunaPetugas(
                                                                           siswa:
                                                                               siswas[index],
                                                                         ),
