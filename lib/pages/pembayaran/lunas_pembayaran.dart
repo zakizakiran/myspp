@@ -18,13 +18,11 @@ class LunasPembayaran extends ConsumerStatefulWidget {
 
 class _LunasPembayaranState extends ConsumerState<LunasPembayaran> {
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _totalBayar;
+  final TextEditingController _totalBayar = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _totalBayar =
-        TextEditingController(text: widget.pembayaran.jmlBayar.toString());
   }
 
   @override
@@ -149,8 +147,11 @@ class _LunasPembayaranState extends ConsumerState<LunasPembayaran> {
                     TextFormField(
                       validator: ((value) {
                         // ignore: unrelated_type_equality_checks
-                        if (value!.isEmpty || widget.pembayaran.jmlBayar == 0) {
-                          return 'Mohon nominal pembayaran!';
+                        if (value!.isEmpty || int.tryParse(value) == 0) {
+                          return 'Mohon isi nominal pembayaran!';
+                        } else if (int.parse(value) >
+                            widget.pembayaran.jmlTagihan!.toInt()) {
+                          return 'Nominal pembayaran melebihi tagihan!';
                         }
                         return null;
                       }),
