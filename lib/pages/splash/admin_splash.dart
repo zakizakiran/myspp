@@ -1,7 +1,7 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
-import 'package:myspp_app/navigation/navbar_admin.dart';
+import 'package:myspp_app/components/navigation/navbar_admin.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AdminSplash extends ConsumerStatefulWidget {

@@ -1,50 +1,41 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:myspp_app/navigation/screen_index_admin.dart';
+import 'package:myspp_app/components/navigation/screen_index_user.dart';
 
-class AdminNavigation extends StatefulWidget {
-  const AdminNavigation({super.key});
+class UserNavigation extends StatefulWidget {
+  const UserNavigation({super.key});
 
   @override
-  State<AdminNavigation> createState() => _AdminNavigationState();
+  State<UserNavigation> createState() => _UserNavigationState();
 }
 
-class _AdminNavigationState extends State<AdminNavigation> {
+class _UserNavigationState extends State<UserNavigation> {
   int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: screensAdmin().elementAt(_selectedIndex),
+      body: screens().elementAt(_selectedIndex),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
         child: GNav(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           rippleColor: Colors.grey[300]!,
           hoverColor: Colors.grey[100]!,
-          gap: 5,
+          gap: 8,
           activeColor: Colors.white,
           iconSize: 24,
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           duration: const Duration(milliseconds: 400),
           tabBackgroundColor: HexColor('204FA1'),
           color: HexColor('204FA1'),
           tabs: const [
             GButton(
               icon: Icons.home_rounded,
-              text: 'Beranda',
+              text: 'Home',
             ),
             GButton(
-              icon: Icons.monetization_on_rounded,
-              text: 'Pembayaran',
-            ),
-            GButton(
-              icon: Icons.history,
-              text: 'Riwayat',
-            ),
-            GButton(
-              icon: EvaIcons.settings,
+              icon: Icons.settings_rounded,
               text: 'Settings',
             ),
           ],

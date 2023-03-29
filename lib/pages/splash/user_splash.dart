@@ -2,7 +2,7 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
-import 'package:myspp_app/navigation/navbar_user.dart';
+import 'package:myspp_app/components/navigation/navbar_user.dart';
 
 class UserSplash extends ConsumerStatefulWidget {
   const UserSplash({super.key});
