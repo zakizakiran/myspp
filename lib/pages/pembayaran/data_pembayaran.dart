@@ -68,18 +68,18 @@ class _DataPembayaranState extends ConsumerState<DataPembayaran> {
         appBar: AppBar(
           actions: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: IconButton(
-                  onPressed: () {
-                    try {
-                      laporanPembayaran.saveDataToCSV(context, pembayaran,
-                          "Laporan Pembayaran ${DateFormat.yMMMMEEEEd('id').format(DateTime.now())}.csv");
-                    } catch (e) {
-                      Logger().i(e);
-                    }
-                  },
-                  icon: const Icon(EvaIcons.fileAddOutline)),
-            )
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: IconButton(
+                    onPressed: () {
+                      try {
+                        laporanPembayaran.saveDataToCSV(context, pembayaran,
+                            "Laporan Pembayaran ${DateFormat.yMMMMEEEEd('id').format(DateTime.now())}.csv");
+                      } catch (e) {
+                        Logger().i(e);
+                      }
+                    },
+                    icon: SvgPicture.asset('assets/img/excel-icon.svg',
+                        width: 30)))
           ],
           elevation: 0,
           backgroundColor: Colors.white,
