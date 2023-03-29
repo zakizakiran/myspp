@@ -140,7 +140,6 @@ class _UserSettingsState extends ConsumerState<UserSettings> {
                                   'Logout',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 16.0,
                                   ),
                                 ),
                               ],
@@ -179,7 +178,6 @@ class _UserSettingsState extends ConsumerState<UserSettings> {
                                   'Hapus Akun',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 16.0,
                                   ),
                                 ),
                               ],

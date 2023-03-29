@@ -141,7 +141,6 @@ class _AdminSettingsState extends ConsumerState<AdminSettings> {
                                   'Logout',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 16.0,
                                   ),
                                 ),
                               ],
@@ -176,7 +175,6 @@ class _AdminSettingsState extends ConsumerState<AdminSettings> {
                                   'Hapus Aktivitas',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 16.0,
                                   ),
                                 ),
                               ],
@@ -215,7 +213,6 @@ class _AdminSettingsState extends ConsumerState<AdminSettings> {
                                   'Hapus Akun',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 16.0,
                                   ),
                                 ),
                               ],
