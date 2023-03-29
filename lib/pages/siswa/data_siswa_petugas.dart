@@ -100,23 +100,6 @@ class _DataSiswaPetugasState extends ConsumerState<DataSiswaPetugas> {
                   Navigator.of(context).pop();
                 },
                 icon: const Icon(Icons.arrow_back_ios)),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 12.0),
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const TambahSiswa()));
-                    },
-                    icon: Icon(
-                      EvaIcons.plusCircle,
-                      color: HexColor('0F0D35'),
-                      size: 35,
-                    )),
-              )
-            ],
             elevation: 0,
             backgroundColor: Colors.white,
             foregroundColor: Colors.black,
