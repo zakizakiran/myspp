@@ -144,6 +144,12 @@ class _TambahPenggunaState extends ConsumerState<TambahPengguna> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
+                              validator: ((value) {
+                                if (value!.isEmpty) {
+                                  return 'Mohon isi Email!';
+                                }
+                                return null;
+                              }),
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
                               controller: email,
@@ -152,6 +158,16 @@ class _TambahPenggunaState extends ConsumerState<TambahPengguna> {
                                   Icons.alternate_email_rounded,
                                   color: Colors.white,
                                 ),
+                                errorStyle:
+                                    const TextStyle(color: Colors.white),
+                                focusedErrorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                        color: Colors.white, width: 2)),
+                                errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                        color: Colors.red, width: 2)),
                                 focusColor: Colors.white,
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20),
@@ -190,6 +206,16 @@ class _TambahPenggunaState extends ConsumerState<TambahPengguna> {
                                     Icons.lock_outline_rounded,
                                     color: Colors.white,
                                   ),
+                                  errorStyle:
+                                      const TextStyle(color: Colors.white),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: const BorderSide(
+                                          color: Colors.white, width: 2)),
+                                  errorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: const BorderSide(
+                                          color: Colors.red, width: 2)),
                                   focusColor: Colors.white,
                                   focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(20),
@@ -221,6 +247,12 @@ class _TambahPenggunaState extends ConsumerState<TambahPengguna> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
+                              validator: ((value) {
+                                if (value!.isEmpty) {
+                                  return 'Mohon isi nama!';
+                                }
+                                return null;
+                              }),
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
                               controller: nama,
@@ -229,6 +261,16 @@ class _TambahPenggunaState extends ConsumerState<TambahPengguna> {
                                   Icons.person_rounded,
                                   color: Colors.white,
                                 ),
+                                errorStyle:
+                                    const TextStyle(color: Colors.white),
+                                focusedErrorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                        color: Colors.white, width: 2)),
+                                errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                        color: Colors.red, width: 2)),
                                 focusColor: Colors.white,
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20),
@@ -252,7 +294,7 @@ class _TambahPenggunaState extends ConsumerState<TambahPengguna> {
                                     hintText: ''),
                                 validator: (val) {
                                   if (val == null || val == '') {
-                                    return 'Please Choose Your Grade!';
+                                    return 'Mohon pilih role!';
                                   }
                                   return null;
                                 },
@@ -292,6 +334,12 @@ class _TambahPenggunaState extends ConsumerState<TambahPengguna> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
+                              validator: ((value) {
+                                if (value!.isEmpty) {
+                                  return 'Mohon isi alamat!';
+                                }
+                                return null;
+                              }),
                               controller: alamat,
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
@@ -300,6 +348,16 @@ class _TambahPenggunaState extends ConsumerState<TambahPengguna> {
                                   EvaIcons.pin,
                                   color: Colors.white,
                                 ),
+                                errorStyle:
+                                    const TextStyle(color: Colors.white),
+                                focusedErrorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                        color: Colors.white, width: 2)),
+                                errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                        color: Colors.red, width: 2)),
                                 focusColor: Colors.white,
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20),
@@ -319,6 +377,12 @@ class _TambahPenggunaState extends ConsumerState<TambahPengguna> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
+                              validator: ((value) {
+                                if (value!.isEmpty) {
+                                  return 'Mohon isi nomor telepon!';
+                                }
+                                return null;
+                              }),
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
                               controller: telp,
@@ -327,6 +391,16 @@ class _TambahPenggunaState extends ConsumerState<TambahPengguna> {
                                   Icons.phone_rounded,
                                   color: Colors.white,
                                 ),
+                                errorStyle:
+                                    const TextStyle(color: Colors.white),
+                                focusedErrorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                        color: Colors.white, width: 2)),
+                                errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                        color: Colors.red, width: 2)),
                                 focusColor: Colors.white,
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20),

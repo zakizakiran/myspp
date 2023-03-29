@@ -147,7 +147,13 @@ class _LunasPembayaranState extends ConsumerState<LunasPembayaran> {
                     ),
                     const SizedBox(height: 40.0),
                     TextFormField(
-                      validator: (value) {},
+                      validator: ((value) {
+                        // ignore: unrelated_type_equality_checks
+                        if (value!.isEmpty || widget.pembayaran.jmlBayar == 0) {
+                          return 'Mohon nominal pembayaran!';
+                        }
+                        return null;
+                      }),
                       keyboardType: TextInputType.number,
                       style: const TextStyle(color: Colors.white),
                       cursorColor: Colors.white,
@@ -157,6 +163,15 @@ class _LunasPembayaranState extends ConsumerState<LunasPembayaran> {
                           Icons.attach_money_rounded,
                           color: Colors.white,
                         ),
+                        errorStyle: const TextStyle(color: Colors.white),
+                        focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: const BorderSide(
+                                color: Colors.white, width: 2)),
+                        errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide:
+                                const BorderSide(color: Colors.red, width: 2)),
                         focusColor: Colors.white,
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
@@ -183,40 +198,44 @@ class _LunasPembayaranState extends ConsumerState<LunasPembayaran> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16.0))),
                             onPressed: () async {
-                              try {
-                                Pembayaran pembayaran = Pembayaran(
-                                  jmlBayar: int.parse(_totalBayar.text) +
-                                      widget.pembayaran.jmlBayar!.toInt(),
-                                  namaSiswa: widget.pembayaran.namaSiswa,
-                                  nisn: widget.pembayaran.nisn,
-                                  emailSiswa: widget.pembayaran.emailSiswa,
-                                  bulanBayar: widget.pembayaran.bulanBayar,
-                                  tahunBayar: widget.pembayaran.tahunBayar,
-                                  namaPetugas: widget.pembayaran.namaPetugas,
-                                  tglTransaksi: DateTime.now(),
-                                  tglDibuat: widget.pembayaran.tglDibuat,
-                                  jmlTagihan: widget.pembayaran.jmlTagihan,
-                                );
-                                await ref
-                                    .read(pembayaranControllerProvider.notifier)
-                                    .updateBayar(
-                                      context: context,
-                                      jmlBayar: int.parse(_totalBayar.text),
-                                      jmlTagihan:
-                                          widget.pembayaran.jmlTagihan!.toInt(),
-                                      pembayaran: pembayaran,
-                                      pid: widget.pembayaran.pid.toString(),
-                                    );
-                                if (!mounted) return;
-                                Navigator.of(context)
-                                  ..pop()
-                                  ..pop();
-                                Snackbars().successSnackbars(
-                                    context,
-                                    'Berhasil',
-                                    'Berhasil Melakukan Pembayaran!');
-                              } on FirebaseException catch (e) {
-                                Logger().i(e.message);
+                              if (_formKey.currentState!.validate()) {
+                                try {
+                                  Pembayaran pembayaran = Pembayaran(
+                                    jmlBayar: int.parse(_totalBayar.text) +
+                                        widget.pembayaran.jmlBayar!.toInt(),
+                                    namaSiswa: widget.pembayaran.namaSiswa,
+                                    nisn: widget.pembayaran.nisn,
+                                    emailSiswa: widget.pembayaran.emailSiswa,
+                                    bulanBayar: widget.pembayaran.bulanBayar,
+                                    tahunBayar: widget.pembayaran.tahunBayar,
+                                    namaPetugas: widget.pembayaran.namaPetugas,
+                                    tglTransaksi: DateTime.now(),
+                                    tglDibuat: widget.pembayaran.tglDibuat,
+                                    jmlTagihan: widget.pembayaran.jmlTagihan,
+                                  );
+                                  await ref
+                                      .read(
+                                          pembayaranControllerProvider.notifier)
+                                      .updateBayar(
+                                        context: context,
+                                        jmlBayar: int.parse(_totalBayar.text),
+                                        jmlTagihan: widget
+                                            .pembayaran.jmlTagihan!
+                                            .toInt(),
+                                        pembayaran: pembayaran,
+                                        pid: widget.pembayaran.pid.toString(),
+                                      );
+                                  if (!mounted) return;
+                                  Navigator.of(context)
+                                    ..pop()
+                                    ..pop();
+                                  Snackbars().successSnackbars(
+                                      context,
+                                      'Berhasil',
+                                      'Berhasil Melakukan Pembayaran!');
+                                } on FirebaseException catch (e) {
+                                  Logger().i(e.message);
+                                }
                               }
                             },
                             child: Text(

@@ -156,6 +156,12 @@ class _TambahPenggunaSiswaState extends ConsumerState<TambahPenggunaSiswa> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
+                              validator: ((value) {
+                                if (value!.isEmpty) {
+                                  return 'Mohon isi email!';
+                                }
+                                return null;
+                              }),
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
                               controller: email,
@@ -233,6 +239,12 @@ class _TambahPenggunaSiswaState extends ConsumerState<TambahPenggunaSiswa> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
+                              validator: ((value) {
+                                if (value!.isEmpty) {
+                                  return 'Mohon isi nama!';
+                                }
+                                return null;
+                              }),
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
                               controller: nama,
@@ -259,6 +271,12 @@ class _TambahPenggunaSiswaState extends ConsumerState<TambahPenggunaSiswa> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
+                              validator: ((value) {
+                                if (value!.isEmpty) {
+                                  return 'Mohon isi alamat!';
+                                }
+                                return null;
+                              }),
                               controller: alamat,
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
@@ -285,6 +303,12 @@ class _TambahPenggunaSiswaState extends ConsumerState<TambahPenggunaSiswa> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
+                              validator: ((value) {
+                                if (value!.isEmpty) {
+                                  return 'Mohon isi nomor telepon!';
+                                }
+                                return null;
+                              }),
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
                               controller: telp,

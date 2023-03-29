@@ -103,10 +103,11 @@ class _PembayaranWidgetState extends ConsumerState<PembayaranWidget> {
                                 }
                                 return DropdownButtonFormField2(
                                   decoration: const InputDecoration.collapsed(
-                                      hintText: ''),
+                                    hintText: '',
+                                  ),
                                   validator: (val) {
                                     if (val == null || val == '') {
-                                      return 'Siswa tidak boleh kosong';
+                                      return 'Siswa tidak boleh kosong!';
                                     }
                                     return null;
                                   },
@@ -428,7 +429,12 @@ class _PembayaranWidgetState extends ConsumerState<PembayaranWidget> {
                           const SizedBox(height: 20.0),
 
                           TextFormField(
-                            validator: (value) {},
+                            validator: ((value) {
+                              if (value!.isEmpty) {
+                                return 'Mohon isi tagihan!';
+                              }
+                              return null;
+                            }),
                             keyboardType: TextInputType.number,
                             style: const TextStyle(color: Colors.white),
                             cursorColor: Colors.white,
@@ -443,6 +449,15 @@ class _PembayaranWidgetState extends ConsumerState<PembayaranWidget> {
                                   borderRadius: BorderRadius.circular(20),
                                   borderSide: const BorderSide(
                                       color: Colors.white, width: 2)),
+                              errorStyle: const TextStyle(color: Colors.white),
+                              focusedErrorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: const BorderSide(
+                                      color: Colors.white, width: 2)),
+                              errorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: const BorderSide(
+                                      color: Colors.red, width: 2)),
                               enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
                                   borderSide: const BorderSide(
@@ -466,31 +481,33 @@ class _PembayaranWidgetState extends ConsumerState<PembayaranWidget> {
                                           borderRadius:
                                               BorderRadius.circular(16.0))),
                                   onPressed: () async {
-                                    try {
-                                      Pembayaran pembayaran = Pembayaran(
-                                        namaSiswa: _currentSiswa,
-                                        emailSiswa: _currentEmail,
-                                        nisn: _nisnController.text,
-                                        bulanBayar: _selectedMonth,
-                                        tahunBayar: _selectedYear,
-                                        namaPetugas: currentUser.nama,
-                                        jmlTagihan:
-                                            int.tryParse(_totalTagihan.text),
-                                      );
-                                      await ref
-                                          .read(pembayaranControllerProvider
-                                              .notifier)
-                                          .tambahPembayaran(
-                                              context: context,
-                                              pembayaran: pembayaran);
-                                      if (!mounted) return;
-                                      Navigator.pop(context);
-                                      Snackbars().successSnackbars(
-                                          context,
-                                          'Berhasil',
-                                          'Berhasil Membuat Tagihan!');
-                                    } on FirebaseException catch (e) {
-                                      Logger().i(e.message);
+                                    if (_formKey.currentState!.validate()) {
+                                      try {
+                                        Pembayaran pembayaran = Pembayaran(
+                                          namaSiswa: _currentSiswa,
+                                          emailSiswa: _currentEmail,
+                                          nisn: _nisnController.text,
+                                          bulanBayar: _selectedMonth,
+                                          tahunBayar: _selectedYear,
+                                          namaPetugas: currentUser.nama,
+                                          jmlTagihan:
+                                              int.tryParse(_totalTagihan.text),
+                                        );
+                                        await ref
+                                            .read(pembayaranControllerProvider
+                                                .notifier)
+                                            .tambahPembayaran(
+                                                context: context,
+                                                pembayaran: pembayaran);
+                                        if (!mounted) return;
+                                        Navigator.pop(context);
+                                        Snackbars().successSnackbars(
+                                            context,
+                                            'Berhasil',
+                                            'Berhasil Membuat Tagihan!');
+                                      } on FirebaseException catch (e) {
+                                        Logger().i(e.message);
+                                      }
                                     }
                                   },
                                   child: Text(

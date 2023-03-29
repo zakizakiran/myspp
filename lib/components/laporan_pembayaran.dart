@@ -15,8 +15,8 @@ class LaporanPembayaran {
       "Nama Siswa",
       "NISN",
       "Tagihan",
-      "Bulan Bayar",
-      "Tahun Bayar",
+      "Bulan",
+      "Tahun",
       "Jumlah Bayar",
       "Tanggal Transaksi",
     ]);

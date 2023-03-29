@@ -48,9 +48,6 @@ class _TambahSiswaState extends ConsumerState<TambahSiswa> {
     super.dispose();
   }
 
-  RegExp regexPass =
-      RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~_])$');
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -136,7 +133,12 @@ class _TambahSiswaState extends ConsumerState<TambahSiswa> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
-                              validator: (value) {},
+                              validator: ((value) {
+                                if (value!.isEmpty) {
+                                  return 'Mohon isi NISN!';
+                                }
+                                return null;
+                              }),
                               keyboardType: TextInputType.number,
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
@@ -146,6 +148,16 @@ class _TambahSiswaState extends ConsumerState<TambahSiswa> {
                                   Icons.tag_rounded,
                                   color: Colors.white,
                                 ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                        color: Colors.white, width: 2)),
+                                errorStyle:
+                                    const TextStyle(color: Colors.white),
+                                errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                        color: Colors.red, width: 2)),
                                 focusColor: Colors.white,
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20),
@@ -164,6 +176,12 @@ class _TambahSiswaState extends ConsumerState<TambahSiswa> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
+                              validator: ((value) {
+                                if (value!.isEmpty) {
+                                  return 'Mohon isi NIS!';
+                                }
+                                return null;
+                              }),
                               keyboardType: TextInputType.number,
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
@@ -173,6 +191,16 @@ class _TambahSiswaState extends ConsumerState<TambahSiswa> {
                                   Icons.tag_rounded,
                                   color: Colors.white,
                                 ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                        color: Colors.white, width: 2)),
+                                errorStyle:
+                                    const TextStyle(color: Colors.white),
+                                errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                        color: Colors.red, width: 2)),
                                 focusColor: Colors.white,
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20),
@@ -191,6 +219,12 @@ class _TambahSiswaState extends ConsumerState<TambahSiswa> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
+                              validator: ((value) {
+                                if (value!.isEmpty) {
+                                  return 'Mohon isi nama!';
+                                }
+                                return null;
+                              }),
                               keyboardType: TextInputType.text,
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
@@ -200,6 +234,16 @@ class _TambahSiswaState extends ConsumerState<TambahSiswa> {
                                   Icons.person_rounded,
                                   color: Colors.white,
                                 ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                        color: Colors.white, width: 2)),
+                                errorStyle:
+                                    const TextStyle(color: Colors.white),
+                                errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                        color: Colors.red, width: 2)),
                                 focusColor: Colors.white,
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20),
@@ -312,7 +356,7 @@ class _TambahSiswaState extends ConsumerState<TambahSiswa> {
                                                   hintText: ''),
                                           validator: (val) {
                                             if (val == null || val == '') {
-                                              return 'Please Choose Your Grade!';
+                                              return 'Mohon pilih kelas!';
                                             }
                                             return null;
                                           },
@@ -370,6 +414,12 @@ class _TambahSiswaState extends ConsumerState<TambahSiswa> {
                                 : const SizedBox(height: 0),
                             const SizedBox(height: 20.0),
                             TextFormField(
+                              validator: ((value) {
+                                if (value!.isEmpty) {
+                                  return 'Mohon isi alamat!';
+                                }
+                                return null;
+                              }),
                               controller: alamat,
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
@@ -378,6 +428,16 @@ class _TambahSiswaState extends ConsumerState<TambahSiswa> {
                                   EvaIcons.pin,
                                   color: Colors.white,
                                 ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                        color: Colors.white, width: 2)),
+                                errorStyle:
+                                    const TextStyle(color: Colors.white),
+                                errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                        color: Colors.red, width: 2)),
                                 focusColor: Colors.white,
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20),
@@ -396,6 +456,12 @@ class _TambahSiswaState extends ConsumerState<TambahSiswa> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
+                              validator: ((value) {
+                                if (value!.isEmpty) {
+                                  return 'Mohon isi nomor telepon!';
+                                }
+                                return null;
+                              }),
                               keyboardType: TextInputType.phone,
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
@@ -405,6 +471,16 @@ class _TambahSiswaState extends ConsumerState<TambahSiswa> {
                                   Icons.phone_rounded,
                                   color: Colors.white,
                                 ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                        color: Colors.white, width: 2)),
+                                errorStyle:
+                                    const TextStyle(color: Colors.white),
+                                errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                        color: Colors.red, width: 2)),
                                 focusColor: Colors.white,
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20),
@@ -442,27 +518,29 @@ class _TambahSiswaState extends ConsumerState<TambahSiswa> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.0))),
                       onPressed: () async {
-                        try {
-                          Siswa siswa = Siswa(
-                              nisn: nisn.text,
-                              nis: nis.text,
-                              nama: nama.text,
-                              alamat: alamat.text,
-                              kelas: _selectedKelas,
-                              jurusan: _selectedJurusan,
-                              telp: telp.text);
-                          await ref
-                              .read(siswaControllerProvider.notifier)
-                              .tambahSiswa(context: context, siswa: siswa);
-                          setState(() {});
-                          if (!mounted) return;
-                          Navigator.pop(context);
-                          Snackbars().successSnackbars(
-                              context, 'Berhasil', 'Berhasil Menambah Siswa');
-                          Navigator.pop(context);
-                        } on FirebaseException catch (e) {
-                          Snackbars().failedSnackbars(
-                              context, 'Gagal', e.message.toString());
+                        if (_formKey.currentState!.validate()) {
+                          try {
+                            Siswa siswa = Siswa(
+                                nisn: nisn.text,
+                                nis: nis.text,
+                                nama: nama.text,
+                                alamat: alamat.text,
+                                kelas: _selectedKelas,
+                                jurusan: _selectedJurusan,
+                                telp: telp.text);
+                            await ref
+                                .read(siswaControllerProvider.notifier)
+                                .tambahSiswa(context: context, siswa: siswa);
+                            setState(() {});
+                            if (!mounted) return;
+                            Navigator.pop(context);
+                            Snackbars().successSnackbars(
+                                context, 'Berhasil', 'Berhasil Menambah Siswa');
+                            Navigator.pop(context);
+                          } on FirebaseException catch (e) {
+                            Snackbars().failedSnackbars(
+                                context, 'Gagal', e.message.toString());
+                          }
                         }
                       },
                       child: const Text(

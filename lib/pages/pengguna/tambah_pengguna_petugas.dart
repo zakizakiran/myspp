@@ -9,6 +9,7 @@ import 'package:myspp_app/components/get_role.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
 import 'package:myspp_app/controller/siswa_controller.dart';
 import 'package:myspp_app/model/siswa.dart';
+import 'package:myspp_app/pages/pengguna/data_pengguna.dart';
 
 class TambahPenggunaPetugas extends ConsumerStatefulWidget {
   final Siswa? siswa;
@@ -155,6 +156,12 @@ class _TambahPenggunaPetugasState extends ConsumerState<TambahPenggunaPetugas> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
+                              validator: ((value) {
+                                if (value!.isEmpty) {
+                                  return 'Mohon isi email!';
+                                }
+                                return null;
+                              }),
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
                               controller: email,
@@ -163,6 +170,16 @@ class _TambahPenggunaPetugasState extends ConsumerState<TambahPenggunaPetugas> {
                                   Icons.alternate_email_rounded,
                                   color: Colors.white,
                                 ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                        color: Colors.white, width: 2)),
+                                errorStyle:
+                                    const TextStyle(color: Colors.white),
+                                errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                        color: Colors.red, width: 2)),
                                 focusColor: Colors.white,
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20),
@@ -201,6 +218,16 @@ class _TambahPenggunaPetugasState extends ConsumerState<TambahPenggunaPetugas> {
                                     Icons.lock_outline_rounded,
                                     color: Colors.white,
                                   ),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: const BorderSide(
+                                          color: Colors.white, width: 2)),
+                                  errorStyle:
+                                      const TextStyle(color: Colors.white),
+                                  errorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: const BorderSide(
+                                          color: Colors.red, width: 2)),
                                   focusColor: Colors.white,
                                   focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(20),
@@ -232,6 +259,12 @@ class _TambahPenggunaPetugasState extends ConsumerState<TambahPenggunaPetugas> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
+                              validator: ((value) {
+                                if (value!.isEmpty) {
+                                  return 'Mohon isi nama!';
+                                }
+                                return null;
+                              }),
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
                               controller: nama,
@@ -258,6 +291,12 @@ class _TambahPenggunaPetugasState extends ConsumerState<TambahPenggunaPetugas> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
+                              validator: ((value) {
+                                if (value!.isEmpty) {
+                                  return 'Mohon isi alamat!';
+                                }
+                                return null;
+                              }),
                               controller: alamat,
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
@@ -284,6 +323,12 @@ class _TambahPenggunaPetugasState extends ConsumerState<TambahPenggunaPetugas> {
                             ),
                             const SizedBox(height: 20.0),
                             TextFormField(
+                              validator: ((value) {
+                                if (value!.isEmpty) {
+                                  return 'Mohon isi nomor telepon!';
+                                }
+                                return null;
+                              }),
                               style: const TextStyle(color: Colors.white),
                               cursorColor: Colors.white,
                               controller: telp,
@@ -347,7 +392,11 @@ class _TambahPenggunaPetugasState extends ConsumerState<TambahPenggunaPetugas> {
                                   _currentRole.toString(),
                                 );
                             if (!mounted) return;
-                            Navigator.pop(context);
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const DataPengguna()));
                             setState(() {});
                           } on FirebaseAuthException catch (e) {
                             log(e.message.toString());
