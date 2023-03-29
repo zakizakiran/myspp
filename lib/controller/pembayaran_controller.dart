@@ -23,6 +23,7 @@ class PembayaranController extends StateNotifier<List<Pembayaran>> {
     var checkPembayaran = await db
         .where('email_siswa',
             isEqualTo: FirebaseAuth.instance.currentUser!.email)
+        .orderBy('tgl_dibuat', descending: true)
         .get();
 
     List<Pembayaran> pembayarans =
