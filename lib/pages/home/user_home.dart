@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:myspp_app/components/animations/showup.dart';
 import 'package:myspp_app/controller/auth_controller.dart';
 import 'package:myspp_app/controller/pembayaran_controller.dart';
 import 'package:myspp_app/controller/pembayaran_history_controller.dart';
@@ -225,148 +226,153 @@ class _UserHomeState extends ConsumerState<UserHome> {
             ),
           ),
           SizedBox(height: MediaQuery.of(context).size.height / 7),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.43,
-            child: Card(
-              margin: EdgeInsets.zero,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16.0),
-                  topRight: Radius.circular(16.0),
+          ShowUp(
+            delay: 100,
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.43,
+              child: Card(
+                margin: EdgeInsets.zero,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16.0),
+                    topRight: Radius.circular(16.0),
+                  ),
                 ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Tagihan Anda',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22.0,
-                              color: HexColor('204FA1')),
-                        ),
-                        TextButton(
-                          style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                          child: Text(
-                            'Total | ${pembayaranTotal.length}',
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Tagihan Anda',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.grey[400]),
+                                fontSize: 22.0,
+                                color: HexColor('204FA1')),
                           ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const DataPembayaranUser()));
-                          },
-                        ),
-                      ],
+                          TextButton(
+                            style:
+                                TextButton.styleFrom(padding: EdgeInsets.zero),
+                            child: Text(
+                              'Total | ${pembayaranTotal.length}',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey[400]),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const DataPembayaranUser()));
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                        padding:
-                            const EdgeInsets.fromLTRB(20.0, 35.0, 20.0, 0.0),
-                        child: ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          padding: const EdgeInsets.only(bottom: 50.0),
-                          itemCount: pembayaran.take(2).length,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                DetailBottomSheet(
-                                    context: context,
-                                    pembayaran: pembayaran[index],
-                                    result: index);
-                              },
-                              child: Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 18.0, vertical: 12.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            'Tagihan Bulan',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          const SizedBox(height: 5.0),
-                                          Row(
-                                            children: [
-                                              Text(pembayaran[index]
-                                                  .bulanBayar
-                                                  .toString()),
-                                              const SizedBox(width: 5.0),
-                                              Text(pembayaran[index]
-                                                  .tahunBayar
-                                                  .toString()),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 8.0),
-                                          const Text(
-                                            'Jumlah Tagihan',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          const SizedBox(height: 5.0),
-                                          pembayaran[index].jmlTagihan == 0
-                                              ? const Text('-')
-                                              : Text(
-                                                  NumberFormat.simpleCurrency(
-                                                          locale: 'id',
-                                                          name: 'Rp. ')
-                                                      .format(pembayaran[index]
-                                                          .jmlTagihan))
-                                        ],
-                                      ),
-                                      pembayaran[index].jmlTagihan == 0
-                                          ? Card(
-                                              color: Colors.greenAccent[100],
-                                              margin: EdgeInsets.zero,
-                                              child: const Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 3.0,
-                                                    horizontal: 10.0),
-                                                child: Text(
-                                                  'Lunas',
-                                                  style: TextStyle(
-                                                      color: Colors.green),
-                                                ),
-                                              ))
-                                          : Card(
-                                              color: Colors.grey[200],
-                                              margin: EdgeInsets.zero,
-                                              child: const Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 3.0,
-                                                    horizontal: 8.0),
-                                                child: Text(
-                                                  'Belum Lunas',
-                                                  style: TextStyle(
-                                                      color: Colors.grey),
-                                                ),
-                                              )),
-                                    ],
+                    Expanded(
+                      child: Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(20.0, 35.0, 20.0, 0.0),
+                          child: ListView.builder(
+                            physics: const BouncingScrollPhysics(),
+                            padding: const EdgeInsets.only(bottom: 50.0),
+                            itemCount: pembayaran.take(2).length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  DetailBottomSheet(
+                                      context: context,
+                                      pembayaran: pembayaran[index],
+                                      result: index);
+                                },
+                                child: Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 18.0, vertical: 12.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              'Tagihan Bulan',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            const SizedBox(height: 5.0),
+                                            Row(
+                                              children: [
+                                                Text(pembayaran[index]
+                                                    .bulanBayar
+                                                    .toString()),
+                                                const SizedBox(width: 5.0),
+                                                Text(pembayaran[index]
+                                                    .tahunBayar
+                                                    .toString()),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 8.0),
+                                            const Text(
+                                              'Jumlah Tagihan',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            const SizedBox(height: 5.0),
+                                            pembayaran[index].jmlTagihan == 0
+                                                ? const Text('-')
+                                                : Text(
+                                                    NumberFormat.simpleCurrency(
+                                                            locale: 'id',
+                                                            name: 'Rp. ')
+                                                        .format(
+                                                            pembayaran[index]
+                                                                .jmlTagihan))
+                                          ],
+                                        ),
+                                        pembayaran[index].jmlTagihan == 0
+                                            ? Card(
+                                                color: Colors.greenAccent[100],
+                                                margin: EdgeInsets.zero,
+                                                child: const Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 3.0,
+                                                      horizontal: 10.0),
+                                                  child: Text(
+                                                    'Lunas',
+                                                    style: TextStyle(
+                                                        color: Colors.green),
+                                                  ),
+                                                ))
+                                            : Card(
+                                                color: Colors.grey[200],
+                                                margin: EdgeInsets.zero,
+                                                child: const Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 3.0,
+                                                      horizontal: 8.0),
+                                                  child: Text(
+                                                    'Belum Lunas',
+                                                    style: TextStyle(
+                                                        color: Colors.grey),
+                                                  ),
+                                                )),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
-                        )),
-                  ),
-                ],
+                              );
+                            },
+                          )),
+                    ),
+                  ],
+                ),
               ),
             ),
           )

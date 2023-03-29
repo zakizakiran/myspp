@@ -215,7 +215,7 @@ class _UserSettingsState extends ConsumerState<UserSettings> {
             actions: [
               TextFormField(
                 style: const TextStyle(color: Colors.black),
-                cursorColor: Colors.black,
+                cursorColor: HexColor('204FA1'),
                 validator: ((value) {
                   if (value!.isEmpty) {
                     return 'Kata sandi tidak boleh kosong';
@@ -228,9 +228,9 @@ class _UserSettingsState extends ConsumerState<UserSettings> {
                   labelText: 'Kata Sandi',
                   labelStyle: const TextStyle(
                       fontWeight: FontWeight.w600, color: Colors.black),
-                  prefixIcon: const Icon(
+                  prefixIcon: Icon(
                     Icons.lock_outline_rounded,
-                    color: Colors.black,
+                    color: HexColor('204FA1'),
                   ),
                   focusColor: Colors.black,
                   focusedBorder: OutlineInputBorder(
@@ -244,7 +244,7 @@ class _UserSettingsState extends ConsumerState<UserSettings> {
                 ),
                 textInputAction: TextInputAction.next,
               ),
-              const SizedBox(height: 20.0),
+              const SizedBox(height: 30.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
