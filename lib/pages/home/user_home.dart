@@ -247,7 +247,7 @@ class _UserHomeState extends ConsumerState<UserHome> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Tagihan',
+                            'Tagihan Terbaru',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 22.0,
