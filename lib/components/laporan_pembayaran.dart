@@ -19,6 +19,7 @@ class LaporanPembayaran {
       "Tahun",
       "Jumlah Bayar",
       "Tanggal Transaksi",
+      "Status"
     ]);
 
     // Tambahkan baris data model ke dalam CSV
@@ -34,6 +35,7 @@ class LaporanPembayaran {
             .format(model.jmlBayar),
         DateFormat.yMMMMEEEEd('id')
             .format(DateTime.tryParse(model.tglTransaksi.toString())!),
+        model.jmlTagihan == 0 ? 'Lunas' : 'Belum Lunas'
       ]);
     }
     // Konversi rows menjadi format CSV menggunakan flutter_csv
